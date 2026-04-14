@@ -339,7 +339,6 @@ document.getElementById('successModal').addEventListener('click', (e) => {
 
 // --- ADMIN PANEL ---
 function createAdminPanel() {
-    // Admin trigger button
     const trigger = document.createElement('button');
     trigger.className = 'admin-trigger';
     trigger.title = 'Base de donnees';
@@ -347,28 +346,32 @@ function createAdminPanel() {
     trigger.onclick = toggleAdmin;
     document.body.appendChild(trigger);
 
-    // Overlay
     const overlay = document.createElement('div');
     overlay.className = 'admin-overlay';
     overlay.id = 'adminOverlay';
     overlay.onclick = toggleAdmin;
     document.body.appendChild(overlay);
 
-    // Panel
     const panel = document.createElement('div');
-    panel.className = 'admin-panel';
+    panel.className = 'admin-panel admin-panel-v2';
     panel.id = 'adminPanel';
     panel.innerHTML = `
         <div class="admin-header">
-            <h3>Base de donnees — Inscriptions</h3>
+            <h3>Jump Club — Base de donnees</h3>
             <button class="admin-close" onclick="toggleAdmin()">&times;</button>
         </div>
         <div class="admin-content">
             <div class="admin-stats" id="adminStats"></div>
+            <div class="admin-search-row">
+                <input type="text" id="adminSearch" class="admin-search" placeholder="Rechercher par nom enfant ou parent..." oninput="updateAdminPanel()">
+            </div>
             <div class="admin-filters" id="adminFilters">
                 <button class="admin-filter active" data-filter="all" onclick="filterAdmin('all', this)">Tous</button>
                 <button class="admin-filter" data-filter="natation" onclick="filterAdmin('natation', this)">Natation</button>
                 <button class="admin-filter" data-filter="stage" onclick="filterAdmin('stage', this)">Stages</button>
+                <button class="admin-filter" data-filter="molenbeek" onclick="filterAdmin('molenbeek', this)">Molenbeek</button>
+                <button class="admin-filter" data-filter="uccle" onclick="filterAdmin('uccle', this)">Uccle</button>
+                <button class="admin-filter" data-filter="ixelles" onclick="filterAdmin('ixelles', this)">Ixelles</button>
                 <button class="admin-filter" data-filter="paid" onclick="filterAdmin('paid', this)">Payes</button>
                 <button class="admin-filter" data-filter="pending" onclick="filterAdmin('pending', this)">En attente</button>
             </div>
@@ -388,6 +391,31 @@ function createAdminPanel() {
     document.body.appendChild(panel);
 
     updateAdminPanel();
+}
+
+function activityLabel(act) {
+    const map = {
+        'natation-ixelles': 'Natation Ixelles',
+        'natation-molenbeek': 'Natation Molenbeek',
+        'stage-start-molenbeek': 'Stage Start Molenbeek',
+        'stage-boost-molenbeek': 'Stage Boost Molenbeek',
+        'stage-go-molenbeek': 'Stage Go Molenbeek',
+        'stage-start-uccle': 'Stage Start Uccle',
+        'stage-boost-uccle': 'Stage Boost Uccle',
+        'stage-go-uccle': 'Stage Go Uccle'
+    };
+    return map[act] || act;
+}
+
+function periodLabel(p) {
+    const map = {
+        'saison-2025-2026': 'Annee 2025-2026',
+        'carnaval': 'Carnaval',
+        'paques': 'Paques',
+        'ete': 'Ete',
+        'toussaint': 'Toussaint'
+    };
+    return map[p] || p;
 }
 
 window.toggleAdmin = function() {
@@ -418,31 +446,50 @@ async function updateAdminPanel() {
     // Stats
     const total = inscriptions.length;
     const paid = inscriptions.filter(i => i.payment_status === 'paid').length;
+    const pending = inscriptions.filter(i => i.payment_status === 'pending').length;
     const revenue = inscriptions.filter(i => i.payment_status === 'paid').reduce((sum, i) => sum + (i.price || 0), 0);
+    const potentialRevenue = inscriptions.reduce((sum, i) => sum + (i.price || 0), 0);
 
     statsEl.innerHTML = `
         <div class="admin-stat"><span class="num">${total}</span><span class="label">Inscrits</span></div>
-        <div class="admin-stat"><span class="num">${paid}</span><span class="label">Payes</span></div>
-        <div class="admin-stat"><span class="num">${revenue}\u20AC</span><span class="label">Revenus</span></div>
+        <div class="admin-stat"><span class="num" style="color:#4CAF50">${paid}</span><span class="label">Payes</span></div>
+        <div class="admin-stat"><span class="num" style="color:#FF9800">${pending}</span><span class="label">En attente</span></div>
+        <div class="admin-stat"><span class="num">${revenue}\u20AC</span><span class="label">Encaisse</span></div>
     `;
 
     // Filter
+    const searchQuery = (document.getElementById('adminSearch')?.value || '').toLowerCase().trim();
     let filtered = inscriptions;
     switch(currentFilter) {
-        case 'natation': filtered = inscriptions.filter(i => i.activity?.startsWith('natation')); break;
-        case 'stage': filtered = inscriptions.filter(i => i.activity?.startsWith('stage')); break;
-        case 'paid': filtered = inscriptions.filter(i => i.payment_status === 'paid'); break;
-        case 'pending': filtered = inscriptions.filter(i => i.payment_status === 'pending'); break;
+        case 'natation': filtered = filtered.filter(i => i.activity?.startsWith('natation')); break;
+        case 'stage': filtered = filtered.filter(i => i.activity?.startsWith('stage')); break;
+        case 'molenbeek': filtered = filtered.filter(i => i.activity?.includes('molenbeek')); break;
+        case 'uccle': filtered = filtered.filter(i => i.activity?.includes('uccle')); break;
+        case 'ixelles': filtered = filtered.filter(i => i.activity?.includes('ixelles')); break;
+        case 'paid': filtered = filtered.filter(i => i.payment_status === 'paid'); break;
+        case 'pending': filtered = filtered.filter(i => i.payment_status === 'pending'); break;
     }
 
-    // Sort by group
-    filtered.sort((a, b) => (a.group_name || '').localeCompare(b.group_name || ''));
+    if (searchQuery) {
+        filtered = filtered.filter(i =>
+            (i.child_name || '').toLowerCase().includes(searchQuery) ||
+            (i.parent_name || '').toLowerCase().includes(searchQuery) ||
+            (i.parent_email || '').toLowerCase().includes(searchQuery)
+        );
+    }
+
+    // Sort by group then date
+    filtered.sort((a, b) => {
+        const g = (a.group_name || '').localeCompare(b.group_name || '');
+        if (g !== 0) return g;
+        return new Date(b.created_at) - new Date(a.created_at);
+    });
 
     if (filtered.length === 0) {
         tableWrapper.innerHTML = `
             <div class="no-data">
                 <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
-                <p>Aucune inscription pour le moment.</p>
+                <p>Aucune inscription.</p>
             </div>
         `;
         return;
@@ -458,30 +505,77 @@ async function updateAdminPanel() {
 
     let html = '';
     for (const [groupName, members] of Object.entries(groups)) {
-        const groupColor = groupName.includes('Natation') ? '#2196F3' : '#FF6B35';
-        html += `<h4 style="margin: 20px 0 10px; font-size: 0.9rem; color: ${groupColor}; display: flex; align-items: center; gap: 6px;">
-            <span style="width: 8px; height: 8px; border-radius: 50%; background: ${groupColor}; display: inline-block;"></span>
-            ${groupName} (${members.length})
-        </h4>`;
-        html += `<table class="admin-table"><thead><tr>
-            <th>Enfant</th><th>Age</th><th>Parent</th><th>Paiement</th><th>Statut</th><th>Actions</th>
-        </tr></thead><tbody>`;
+        const isNatation = groupName.includes('Natation');
+        const groupColor = isNatation ? '#2196F3' : '#FF6B35';
+        const groupBg = isNatation ? 'rgba(33,150,243,0.08)' : 'rgba(255,107,53,0.08)';
+        const groupPaid = members.filter(m => m.payment_status === 'paid').length;
+        const groupRevenue = members.filter(m => m.payment_status === 'paid').reduce((s, m) => s + (m.price || 0), 0);
+
+        html += `
+        <div class="group-section">
+            <div class="group-section-header" style="background:${groupBg};border-left:4px solid ${groupColor}">
+                <div>
+                    <h4 style="color:${groupColor}">${groupName}</h4>
+                    <span class="group-section-meta">${members.length} inscrit${members.length > 1 ? 's' : ''} &middot; ${groupPaid} paye${groupPaid > 1 ? 's' : ''} &middot; ${groupRevenue}\u20AC encaisse${groupRevenue > 1 ? 's' : ''}</span>
+                </div>
+            </div>
+            <div class="fiches-grid">
+        `;
+
         members.forEach(m => {
-            const statusClass = m.payment_status === 'paid' ? 'paid' : 'pending';
-            const statusText = m.payment_status === 'paid' ? 'Paye' : 'En attente';
-            html += `<tr>
-                <td><strong>${m.child_name || '-'}</strong></td>
-                <td>${m.child_age || '-'} ans</td>
-                <td>${m.parent_name || '-'}<br><small style="color:#8e8e9e">${m.parent_email || ''}</small></td>
-                <td>${m.price || 0}\u20AC<br><small style="color:#8e8e9e">${m.payment_method || '-'}</small></td>
-                <td><span class="status-badge ${statusClass}">${statusText}</span></td>
-                <td>
-                    ${m.payment_status === 'pending' ? `<button onclick="markPaid(${m.id})" style="background:none;border:none;color:#4CAF50;cursor:pointer;font-size:0.8rem;font-weight:600;font-family:var(--font);">Valider</button>` : ''}
-                    <button onclick="deleteInscription(${m.id})" style="background:none;border:none;color:#F44336;cursor:pointer;font-size:0.8rem;font-family:var(--font);margin-left:4px;">Suppr.</button>
-                </td>
-            </tr>`;
+            const isPaid = m.payment_status === 'paid';
+            const date = m.created_at ? new Date(m.created_at).toLocaleDateString('fr-BE') : '-';
+            html += `
+            <div class="fiche ${isPaid ? 'fiche-paid' : 'fiche-pending'}">
+                <div class="fiche-header">
+                    <div class="fiche-name">
+                        <span class="fiche-initial" style="background:${groupColor}">${(m.child_name || '?').charAt(0).toUpperCase()}</span>
+                        <div>
+                            <strong>${m.child_name || '-'}</strong>
+                            <span class="fiche-age">${m.child_age || '-'} ans</span>
+                        </div>
+                    </div>
+                    <span class="status-badge ${isPaid ? 'paid' : 'pending'}">${isPaid ? 'Paye' : 'En attente'}</span>
+                </div>
+                <div class="fiche-body">
+                    <div class="fiche-row">
+                        <span class="fiche-label">Activite</span>
+                        <span class="fiche-value">${activityLabel(m.activity)}</span>
+                    </div>
+                    <div class="fiche-row">
+                        <span class="fiche-label">Periode</span>
+                        <span class="fiche-value">${periodLabel(m.period)}</span>
+                    </div>
+                    <div class="fiche-row">
+                        <span class="fiche-label">Parent</span>
+                        <span class="fiche-value">${m.parent_name || '-'}</span>
+                    </div>
+                    <div class="fiche-row">
+                        <span class="fiche-label">Email</span>
+                        <span class="fiche-value fiche-contact"><a href="mailto:${m.parent_email}">${m.parent_email || '-'}</a></span>
+                    </div>
+                    <div class="fiche-row">
+                        <span class="fiche-label">Telephone</span>
+                        <span class="fiche-value fiche-contact"><a href="tel:${m.parent_phone}">${m.parent_phone || '-'}</a></span>
+                    </div>
+                    <div class="fiche-row">
+                        <span class="fiche-label">Montant</span>
+                        <span class="fiche-value fiche-price">${m.price || 0}\u20AC <small>(${m.payment_method || 'n/a'})</small></span>
+                    </div>
+                    ${m.message ? `<div class="fiche-row fiche-message"><span class="fiche-label">Message</span><span class="fiche-value">${m.message}</span></div>` : ''}
+                    <div class="fiche-row fiche-date-row">
+                        <span class="fiche-label">Inscrit le</span>
+                        <span class="fiche-value">${date}</span>
+                    </div>
+                </div>
+                <div class="fiche-actions">
+                    ${!isPaid ? `<button class="fiche-btn fiche-btn-validate" onclick="markPaid(${m.id})"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Valider paiement</button>` : ''}
+                    <button class="fiche-btn fiche-btn-delete" onclick="deleteInscription(${m.id})"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+                </div>
+            </div>`;
         });
-        html += `</tbody></table>`;
+
+        html += `</div></div>`;
     }
 
     tableWrapper.innerHTML = html;
