@@ -3,7 +3,7 @@
    ============================================ */
 
 // --- SUPABASE CONFIG ---
-const SUPABASE_URL = 'https://zcxspeaybrcaljgdapb.supabase.co';
+const SUPABASE_URL = 'https://zcxspkeaybrcaljgdapb.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpjeHNwa2VheWJyY2FsamdkYXBiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNjk4NzEsImV4cCI6MjA5MTc0NTg3MX0.JeBvtDg0Txl6a_1vHNft3WZBR47BXLtOSE81gGeIzi0';
 
 const supabaseHeaders = {
