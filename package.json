@@ -1,0 +1,11 @@
+{
+  "name": "jump-club",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "npx serve public -l 3457"
+  },
+  "dependencies": {
+    "@mollie/api-client": "^4.4.0"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "jump-site",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "3457", "-d", "/Users/soufiane/jump-club"],
+      "port": 3457
+    }
+  ]
+}
