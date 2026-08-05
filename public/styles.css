@@ -140,13 +140,14 @@ img { max-width: 100%; height: auto; display: block; }
 
 .btn-outline {
     background: transparent;
-    color: var(--black);
-    border: 2px solid var(--gray-300);
+    color: #fff;
+    border: 2px solid rgba(255,255,255,0.5);
 }
 
 .btn-outline:hover {
-    border-color: var(--orange);
-    color: var(--orange);
+    border-color: #fff;
+    color: #fff;
+    background: rgba(255,255,255,0.1);
     transform: translateY(-2px);
 }
 
@@ -253,7 +254,7 @@ img { max-width: 100%; height: auto; display: block; }
     min-height: 100vh;
     display: flex;
     align-items: center;
-    background: linear-gradient(135deg, #FFF8F4 0%, #F0F4FF 50%, #FFF5F0 100%);
+    background: url('assets/hero-photo.png') center center / cover no-repeat;
     overflow: hidden;
     padding-top: 100px;
 }
@@ -261,7 +262,8 @@ img { max-width: 100%; height: auto; display: block; }
 .hero-bg-shapes {
     position: absolute;
     inset: 0;
-    overflow: hidden;
+    background: linear-gradient(180deg, rgba(12,4,32,0.75), rgba(12,4,32,0.5) 44%, rgba(12,4,32,0.85));
+    z-index: 0;
     pointer-events: none;
 }
 
@@ -314,22 +316,22 @@ img { max-width: 100%; height: auto; display: block; }
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: var(--white);
-    border: 1px solid var(--orange-bg);
-    color: var(--orange);
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: #fff;
     font-size: 0.85rem;
     font-weight: 600;
     padding: 8px 20px;
     border-radius: var(--radius-full);
     margin-bottom: 24px;
-    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(8px);
     animation: fadeInUp 0.6s ease;
 }
 
 .hero-title {
     font-size: clamp(2.2rem, 5vw, 3.5rem);
     font-weight: 900;
-    color: var(--black);
+    color: #fff;
     line-height: 1.1;
     margin-bottom: 20px;
     animation: fadeInUp 0.6s ease 0.1s both;
@@ -337,7 +339,7 @@ img { max-width: 100%; height: auto; display: block; }
 
 .hero-subtitle {
     font-size: 1.1rem;
-    color: var(--gray-600);
+    color: rgba(255,255,255,0.85);
     line-height: 1.7;
     margin-bottom: 32px;
     max-width: 520px;
@@ -364,7 +366,7 @@ img { max-width: 100%; height: auto; display: block; }
 .stat-number {
     font-size: 2rem;
     font-weight: 800;
-    color: var(--black);
+    color: #fff;
 }
 
 .stat-plus {
@@ -376,14 +378,14 @@ img { max-width: 100%; height: auto; display: block; }
 .stat-label {
     display: block;
     font-size: 0.8rem;
-    color: var(--gray-500);
+    color: rgba(255,255,255,0.7);
     margin-top: 4px;
 }
 
 .stat-divider {
     width: 1px;
     height: 40px;
-    background: var(--gray-300);
+    background: rgba(255,255,255,0.3);
 }
 
 /* Hero Visual */
