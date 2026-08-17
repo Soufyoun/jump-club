@@ -95,19 +95,19 @@ function getPrice(activity, period) {
 }
 
 // --- DYNAMIC PERIOD SELECT ---
-const activitySelect = document.getElementById('activity');
-const periodSelect = document.getElementById('period');
-if (activitySelect && periodSelect) {
-    activitySelect.addEventListener('change', function() {
+const _actSelect = document.getElementById('activity');
+const _perSelect = document.getElementById('period');
+if (_actSelect && _perSelect) {
+    _actSelect.addEventListener('change', function() {
         const val = this.value;
         const isNatation = val.startsWith('natation');
-        periodSelect.innerHTML = '';
+        _perSelect.innerHTML = '';
         if (isNatation) {
             const opt = document.createElement('option');
             opt.value = 'saison-2026-2027';
             opt.textContent = 'Année 2026-2027';
             opt.selected = true;
-            periodSelect.appendChild(opt);
+            _perSelect.appendChild(opt);
         } else {
             const periods = [
                 { value: '', text: 'Choisir une période', disabled: true, selected: true },
@@ -122,7 +122,7 @@ if (activitySelect && periodSelect) {
                 opt.textContent = p.text;
                 if (p.disabled) opt.disabled = true;
                 if (p.selected) opt.selected = true;
-                periodSelect.appendChild(opt);
+                _perSelect.appendChild(opt);
             });
         }
     });
