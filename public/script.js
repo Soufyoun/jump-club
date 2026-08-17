@@ -214,8 +214,10 @@ document.querySelectorAll('.activity-card, .level-card, .testimonial-card, .valu
 const heroStats = document.querySelector('.hero-stats');
 if (heroStats) revealObserver.observe(heroStats);
 
-// Start counters right away since hero is visible on load
-setTimeout(animateCounters, 500);
+// Start counters on load and after short delay
+setTimeout(animateCounters, 300);
+setTimeout(animateCounters, 1000);
+window.addEventListener('load', animateCounters);
 
 // --- INSCRIPTION FORM ---
 const inscriptionForm = document.getElementById('inscriptionForm');
