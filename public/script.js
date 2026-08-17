@@ -82,8 +82,8 @@ function assignGroup(activity, age) {
 
 function getPrice(activity, period) {
     const prices = {
-        'natation-ixelles': { 'saison-2025-2026': 210 },
-        'natation-molenbeek': { 'saison-2025-2026': 210 },
+        'natation-ixelles': { 'saison-2026-2027': 250 },
+        'natation-molenbeek': { 'saison-2026-2027': 210 },
         'stage-start-molenbeek': { carnaval: 70, paques: 70, ete: 70, toussaint: 70 },
         'stage-boost-molenbeek': { carnaval: 80, paques: 80, ete: 80, toussaint: 80 },
         'stage-go-molenbeek': { carnaval: 90, paques: 90, ete: 90, toussaint: 90 },
@@ -92,6 +92,40 @@ function getPrice(activity, period) {
         'stage-go-uccle': { carnaval: 110, paques: 110, ete: 110, toussaint: 110 },
     };
     return prices[activity]?.[period] || 0;
+}
+
+// --- DYNAMIC PERIOD SELECT ---
+const activitySelect = document.getElementById('activity');
+const periodSelect = document.getElementById('period');
+if (activitySelect && periodSelect) {
+    activitySelect.addEventListener('change', function() {
+        const val = this.value;
+        const isNatation = val.startsWith('natation');
+        periodSelect.innerHTML = '';
+        if (isNatation) {
+            const opt = document.createElement('option');
+            opt.value = 'saison-2026-2027';
+            opt.textContent = 'Année 2026-2027';
+            opt.selected = true;
+            periodSelect.appendChild(opt);
+        } else {
+            const periods = [
+                { value: '', text: 'Choisir une période', disabled: true, selected: true },
+                { value: 'carnaval', text: 'Stage Carnaval' },
+                { value: 'paques', text: 'Stage Pâques' },
+                { value: 'ete', text: 'Stage Été' },
+                { value: 'toussaint', text: 'Stage Toussaint' }
+            ];
+            periods.forEach(p => {
+                const opt = document.createElement('option');
+                opt.value = p.value;
+                opt.textContent = p.text;
+                if (p.disabled) opt.disabled = true;
+                if (p.selected) opt.selected = true;
+                periodSelect.appendChild(opt);
+            });
+        }
+    });
 }
 
 // --- NAVBAR ---
