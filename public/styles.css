@@ -2411,8 +2411,8 @@ img { max-width: 100%; height: auto; display: block; }
    ============================================ */
 .admin-trigger {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
+    bottom: 90px;
+    right: 24px;
     width: 48px;
     height: 48px;
     border-radius: 50%;
