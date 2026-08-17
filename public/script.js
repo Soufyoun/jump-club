@@ -689,4 +689,21 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 document.addEventListener('DOMContentLoaded', () => {
     createAdminPanel();
     animateCounters();
+
+    // Secret admin : 5 clics sur le logo = ouvre le dashboard
+    let logoClicks = 0;
+    let logoTimer = null;
+    const logo = document.querySelector('.nav-logo');
+    if (logo) {
+        logo.addEventListener('click', (e) => {
+            logoClicks++;
+            clearTimeout(logoTimer);
+            logoTimer = setTimeout(() => { logoClicks = 0; }, 2000);
+            if (logoClicks >= 5) {
+                e.preventDefault();
+                logoClicks = 0;
+                toggleAdmin();
+            }
+        });
+    }
 });
