@@ -2702,30 +2702,35 @@ img { max-width: 100%; height: auto; display: block; }
 
 .admin-content { padding: 24px; }
 
-.admin-filters {
+.admin-tabs {
     display: flex;
-    gap: 8px;
+    gap: 0;
     margin-bottom: 20px;
-    flex-wrap: wrap;
+    border-bottom: 2px solid var(--gray-200);
+    overflow-x: auto;
 }
 
-.admin-filter {
-    padding: 6px 14px;
-    border: 1.5px solid var(--gray-300);
-    border-radius: var(--radius-full);
-    background: var(--white);
+.admin-tab {
+    padding: 10px 16px;
+    border: none;
+    border-bottom: 3px solid transparent;
+    background: none;
     cursor: pointer;
     font-family: var(--font);
     font-size: 0.8rem;
-    font-weight: 500;
-    color: var(--gray-600);
+    font-weight: 600;
+    color: var(--gray-500);
     transition: var(--transition);
+    white-space: nowrap;
+    margin-bottom: -2px;
 }
 
-.admin-filter.active,
-.admin-filter:hover {
-    border-color: var(--orange);
-    background: var(--orange-bg);
+.admin-tab.active {
+    border-bottom-color: var(--orange);
+    color: var(--orange);
+}
+
+.admin-tab:hover {
     color: var(--orange);
 }
 

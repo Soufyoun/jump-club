@@ -391,23 +391,20 @@ function createAdminPanel() {
     panel.id = 'adminPanel';
     panel.innerHTML = `
         <div class="admin-header">
-            <h3>Jump Club — Base de donnees</h3>
+            <h3>Jump Stage — Inscriptions</h3>
             <button class="admin-close" onclick="toggleAdmin()">&times;</button>
         </div>
         <div class="admin-content">
             <div class="admin-stats" id="adminStats"></div>
+            <div class="admin-tabs">
+                <button class="admin-tab active" onclick="switchAdminTab('natation-ixelles', this)">🏊 Natation Ixelles</button>
+                <button class="admin-tab" onclick="switchAdminTab('natation-molenbeek', this)">🏊 Natation Molenbeek</button>
+                <button class="admin-tab" onclick="switchAdminTab('stage-molenbeek', this)">🎯 Stages Molenbeek</button>
+                <button class="admin-tab" onclick="switchAdminTab('stage-uccle', this)">🎯 Stages Uccle</button>
+                <button class="admin-tab" onclick="switchAdminTab('all', this)">📋 Tout</button>
+            </div>
             <div class="admin-search-row">
                 <input type="text" id="adminSearch" class="admin-search" placeholder="Rechercher par nom enfant ou parent..." oninput="updateAdminPanel()">
-            </div>
-            <div class="admin-filters" id="adminFilters">
-                <button class="admin-filter active" data-filter="all" onclick="filterAdmin('all', this)">Tous</button>
-                <button class="admin-filter" data-filter="natation" onclick="filterAdmin('natation', this)">Natation</button>
-                <button class="admin-filter" data-filter="stage" onclick="filterAdmin('stage', this)">Stages</button>
-                <button class="admin-filter" data-filter="molenbeek" onclick="filterAdmin('molenbeek', this)">Molenbeek</button>
-                <button class="admin-filter" data-filter="uccle" onclick="filterAdmin('uccle', this)">Uccle</button>
-                <button class="admin-filter" data-filter="ixelles" onclick="filterAdmin('ixelles', this)">Ixelles</button>
-                <button class="admin-filter" data-filter="paid" onclick="filterAdmin('paid', this)">Payes</button>
-                <button class="admin-filter" data-filter="pending" onclick="filterAdmin('pending', this)">En attente</button>
             </div>
             <div id="adminTableWrapper"></div>
             <div class="admin-export">
@@ -443,10 +440,11 @@ function activityLabel(act) {
 
 function periodLabel(p) {
     const map = {
-        'saison-2025-2026': 'Annee 2025-2026',
+        'saison-2026-2027': 'Année 2026-2027',
+        'saison-2025-2026': 'Année 2025-2026',
         'carnaval': 'Carnaval',
-        'paques': 'Paques',
-        'ete': 'Ete',
+        'paques': 'Pâques',
+        'ete': 'Été',
         'toussaint': 'Toussaint'
     };
     return map[p] || p;
@@ -462,11 +460,11 @@ window.toggleAdmin = function() {
     }
 };
 
-let currentFilter = 'all';
+let currentFilter = 'natation-ixelles';
 
-window.filterAdmin = function(filter, btn) {
-    currentFilter = filter;
-    document.querySelectorAll('.admin-filter').forEach(b => b.classList.remove('active'));
+window.switchAdminTab = function(tab, btn) {
+    currentFilter = tab;
+    document.querySelectorAll('.admin-tab').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     updateAdminPanel();
 };
@@ -477,31 +475,33 @@ async function updateAdminPanel() {
     const tableWrapper = document.getElementById('adminTableWrapper');
     if (!statsEl || !tableWrapper) return;
 
-    // Stats
-    const total = inscriptions.length;
-    const paid = inscriptions.filter(i => i.payment_status === 'paid').length;
-    const pending = inscriptions.filter(i => i.payment_status === 'pending').length;
-    const revenue = inscriptions.filter(i => i.payment_status === 'paid').reduce((sum, i) => sum + (i.price || 0), 0);
-    const potentialRevenue = inscriptions.reduce((sum, i) => sum + (i.price || 0), 0);
+    // Stats globales en haut
+    const totalAll = inscriptions.length;
+    const paidAll = inscriptions.filter(i => i.payment_status === 'paid').length;
+    const revenueAll = inscriptions.filter(i => i.payment_status === 'paid').reduce((sum, i) => sum + (i.price || 0), 0);
+
+    const tabLabels = {
+        'natation-ixelles': '\uD83C\uDFCA Natation Ixelles',
+        'natation-molenbeek': '\uD83C\uDFCA Natation Molenbeek',
+        'stage-molenbeek': '\uD83C\uDFAF Stages Molenbeek',
+        'stage-uccle': '\uD83C\uDFAF Stages Uccle',
+        'all': '\uD83D\uDCCB Tout'
+    };
 
     statsEl.innerHTML = `
-        <div class="admin-stat"><span class="num">${total}</span><span class="label">Inscrits</span></div>
-        <div class="admin-stat"><span class="num" style="color:#4CAF50">${paid}</span><span class="label">Payes</span></div>
-        <div class="admin-stat"><span class="num" style="color:#FF9800">${pending}</span><span class="label">En attente</span></div>
-        <div class="admin-stat"><span class="num">${revenue}\u20AC</span><span class="label">Encaisse</span></div>
+        <div class="admin-stat"><span class="num">${totalAll}</span><span class="label">Total inscrits</span></div>
+        <div class="admin-stat"><span class="num" style="color:#4CAF50">${paidAll}</span><span class="label">Pay\u00E9s</span></div>
+        <div class="admin-stat"><span class="num">${revenueAll}\u20AC</span><span class="label">Encaiss\u00E9</span></div>
     `;
 
-    // Filter
+    // Filter by tab
     const searchQuery = (document.getElementById('adminSearch')?.value || '').toLowerCase().trim();
     let filtered = inscriptions;
     switch(currentFilter) {
-        case 'natation': filtered = filtered.filter(i => i.activity?.startsWith('natation')); break;
-        case 'stage': filtered = filtered.filter(i => i.activity?.startsWith('stage')); break;
-        case 'molenbeek': filtered = filtered.filter(i => i.activity?.includes('molenbeek')); break;
-        case 'uccle': filtered = filtered.filter(i => i.activity?.includes('uccle')); break;
-        case 'ixelles': filtered = filtered.filter(i => i.activity?.includes('ixelles')); break;
-        case 'paid': filtered = filtered.filter(i => i.payment_status === 'paid'); break;
-        case 'pending': filtered = filtered.filter(i => i.payment_status === 'pending'); break;
+        case 'natation-ixelles': filtered = filtered.filter(i => i.activity === 'natation-ixelles'); break;
+        case 'natation-molenbeek': filtered = filtered.filter(i => i.activity === 'natation-molenbeek'); break;
+        case 'stage-molenbeek': filtered = filtered.filter(i => i.activity?.startsWith('stage') && i.activity?.includes('molenbeek')); break;
+        case 'stage-uccle': filtered = filtered.filter(i => i.activity?.startsWith('stage') && i.activity?.includes('uccle')); break;
     }
 
     if (searchQuery) {
