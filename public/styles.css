@@ -1982,15 +1982,18 @@ img { max-width: 100%; height: auto; display: block; }
     color: var(--gray-500);
 }
 
-.contact-form {
+.contact-cta {
     background: var(--white);
     border: 1px solid var(--gray-200);
     border-radius: var(--radius-xl);
-    padding: 36px;
+    padding: 48px;
+    text-align: center;
 }
 
-.contact-form .form-group label {
-    color: var(--gray-700);
+.contact-cta-text {
+    font-size: 1.1rem;
+    color: var(--gray-600);
+    margin-bottom: 24px;
 }
 
 /* ============================================
