@@ -249,14 +249,11 @@ function updatePaymentSection() {
             </h4>
             <div class="price-display"><span id="priceAmount"></span> <small id="priceLabel">/ saison</small></div>
             <div class="payment-methods">
-                <button type="button" class="payment-method" data-method="card" onclick="selectPayment(this)">
-                    Carte bancaire
+                <button type="button" class="payment-method" data-method="online" onclick="selectPayment(this)">
+                    💳 Payer en ligne
                 </button>
-                <button type="button" class="payment-method" data-method="bancontact" onclick="selectPayment(this)">
-                    Bancontact
-                </button>
-                <button type="button" class="payment-method" data-method="virement" onclick="selectPayment(this)">
-                    Virement
+                <button type="button" class="payment-method" data-method="cash" onclick="selectPayment(this)">
+                    💶 Payer en cash
                 </button>
             </div>
             <div id="paymentDetails" class="payment-details-box" style="display:none;">
@@ -287,14 +284,11 @@ window.selectPayment = function(btn) {
     details.style.display = 'block';
 
     switch(method) {
-        case 'card':
-            info.innerHTML = 'Le paiement par carte sera traite de maniere securisee apres validation de votre inscription. Vous recevrez un lien de paiement par email.';
+        case 'online':
+            info.innerHTML = 'Vous serez redirigé vers notre page de paiement sécurisée après validation du formulaire.';
             break;
-        case 'bancontact':
-            info.innerHTML = 'Vous recevrez un lien Bancontact par email pour finaliser le paiement.';
-            break;
-        case 'virement':
-            info.innerHTML = '<strong>IBAN :</strong> BE00 0000 0000 0000<br><strong>Communication :</strong> sera envoyee par email apres inscription.<br>Delai : 5 jours ouvrables.';
+        case 'cash':
+            info.innerHTML = '<strong>⚠️ Important :</strong> N\'oubliez pas de prendre rendez-vous par email à <a href="mailto:info.jumpasbl@gmail.com" style="color:var(--orange);font-weight:600">info.jumpasbl@gmail.com</a> car l\'inscription n\'est pas validée tant qu\'un administrateur ne l\'a pas confirmée.';
             break;
     }
 };
@@ -319,7 +313,7 @@ if (inscriptionForm) {
         console.log('Inscription saved:', saved);
 
         // If online payment selected, redirect to Mollie
-        if (data.paymentMethod === 'card' || data.paymentMethod === 'bancontact') {
+        if (data.paymentMethod === 'online') {
             try {
                 const payRes = await fetch('/api/create-payment', {
                     method: 'POST',
