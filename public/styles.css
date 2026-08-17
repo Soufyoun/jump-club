@@ -94,9 +94,11 @@ img { max-width: 100%; height: auto; display: block; }
 
 .section-jumpy {
     display: block;
-    width: 140px;
+    width: 90px;
     height: auto;
-    margin: 0 auto 8px;
+    margin: 0 auto -10px;
+    position: relative;
+    z-index: 1;
     filter: drop-shadow(0 4px 12px rgba(0,0,0,0.1));
 }
 
@@ -618,9 +620,9 @@ img { max-width: 100%; height: auto; display: block; }
 .activities-overview .section-tag,
 .section-natation .section-tag,
 .section-stages .section-tag {
-    font-size: 1.4rem;
-    padding: 10px 28px;
-    letter-spacing: 2px;
+    font-size: 1.6rem;
+    padding: 14px 40px;
+    letter-spacing: 3px;
     font-weight: 800;
 }
 
