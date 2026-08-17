@@ -93,9 +93,10 @@ img { max-width: 100%; height: auto; display: block; }
 }
 
 .section-jumpy {
+    display: block;
     width: 140px;
     height: auto;
-    margin-bottom: 8px;
+    margin: 0 auto 8px;
     filter: drop-shadow(0 4px 12px rgba(0,0,0,0.1));
 }
 
