@@ -92,6 +92,13 @@ img { max-width: 100%; height: auto; display: block; }
     position: relative;
 }
 
+.section-jumpy {
+    width: 140px;
+    height: auto;
+    margin-bottom: 8px;
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.1));
+}
+
 .card-jumpy {
     width: 64px;
     height: auto;
