@@ -176,20 +176,16 @@ window.addEventListener('scroll', () => {
 // --- COUNTER ANIMATION ---
 function animateCounters() {
     document.querySelectorAll('.stat-number[data-count]').forEach(counter => {
-        if (counter.dataset.animated) return;
         const target = parseInt(counter.dataset.count);
+        if (parseInt(counter.textContent) === target) return;
         const duration = 2000;
-        const step = target / (duration / 16);
-        let current = 0;
-        const timer = setInterval(() => {
-            current += step;
-            if (current >= target) {
-                current = target;
-                clearInterval(timer);
-            }
-            counter.textContent = Math.floor(current);
-        }, 16);
-        counter.dataset.animated = 'true';
+        const start = performance.now();
+        function tick(now) {
+            const progress = Math.min((now - start) / duration, 1);
+            counter.textContent = Math.floor(progress * target);
+            if (progress < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
     });
 }
 
