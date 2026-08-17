@@ -95,14 +95,7 @@ img { max-width: 100%; height: auto; display: block; }
 .card-jumpy {
     width: 64px;
     height: auto;
-}
-
-.jumpy-blue {
     filter: drop-shadow(0 2px 6px rgba(0,0,0,0.1));
-}
-
-.jumpy-orange {
-    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.1)) hue-rotate(330deg) saturate(1.4);
 }
 
 .section-title {
