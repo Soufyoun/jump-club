@@ -2913,3 +2913,20 @@ img { max-width: 100%; height: auto; display: block; }
     .activity-card { padding: 28px 20px; }
     .payment-methods { flex-direction: column; }
 }
+
+/* PARTENAIRES */
+.section-partenaires {
+    padding: 60px 0;
+    background: var(--white);
+}
+
+.partenaires-img {
+    text-align: center;
+}
+
+.partenaires-img img {
+    max-width: 600px;
+    width: 100%;
+    height: auto;
+    opacity: 0.85;
+}
