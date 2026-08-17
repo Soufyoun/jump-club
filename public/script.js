@@ -237,7 +237,8 @@ function updatePaymentSection() {
         return;
     }
 
-    if (!paymentSection) {
+    if (paymentSection) paymentSection.remove();
+    {
         // Create payment section dynamically
         paymentSection = document.createElement('div');
         paymentSection.id = 'paymentSection';
