@@ -1438,6 +1438,24 @@ img { max-width: 100%; height: auto; display: block; }
 .boost-border { border-color: var(--orange-light); }
 .go-border { border-color: var(--blue-light); }
 
+.tab-group-price {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--orange);
+    margin: 16px 0 12px;
+}
+
+.tab-group-price span {
+    font-size: 1.2rem;
+}
+
+.tab-group-price small {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--gray-500);
+}
+
 .tab-group-header {
     text-align: center;
     margin-bottom: 16px;
