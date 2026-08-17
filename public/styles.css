@@ -753,6 +753,13 @@ img { max-width: 100%; height: auto; display: block; }
     margin-bottom: 12px;
 }
 
+.location-address {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--gray-500);
+    margin-bottom: 8px;
+}
+
 .location-schedule {
     display: inline-flex;
     background: var(--blue-bg);
@@ -1611,6 +1618,69 @@ img { max-width: 100%; height: auto; display: block; }
 .testimonial-author span {
     font-size: 0.8rem;
     color: var(--gray-500);
+}
+
+.whatsapp-float {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: #25D366;
+    color: #fff;
+    border-radius: var(--radius-full);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+    z-index: 999;
+    transition: var(--transition);
+}
+
+.whatsapp-float:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 28px rgba(37, 211, 102, 0.5);
+}
+
+.google-reviews-block {
+    display: flex;
+    justify-content: center;
+}
+
+.google-reviews-card {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-xl);
+    padding: 48px;
+    text-align: center;
+    max-width: 500px;
+    box-shadow: var(--shadow-lg);
+}
+
+.google-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--gray-700);
+    margin-bottom: 16px;
+}
+
+.google-stars {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    margin-bottom: 16px;
+}
+
+.google-reviews-text {
+    font-size: 1rem;
+    color: var(--gray-500);
+    margin-bottom: 24px;
 }
 
 /* ============================================
