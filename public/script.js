@@ -518,18 +518,12 @@ function createAdminPanel() {
             </div>
             <div class="admin-search-row">
                 <input type="text" id="adminSearch" class="admin-search" placeholder="Rechercher par nom enfant ou parent..." oninput="updateAdminPanel()">
-            </div>
-            <div id="adminTableWrapper"></div>
-            <div class="admin-export">
-                <button class="btn btn-outline" onclick="exportCSV()">
+                <button class="btn btn-primary" onclick="exportCSV()" style="white-space:nowrap;">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                     Exporter CSV
                 </button>
-                <button class="btn btn-outline" onclick="exportJSON()">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                    Exporter JSON
-                </button>
             </div>
+            <div id="adminTableWrapper"></div>
         </div>
     `;
     document.body.appendChild(panel);
