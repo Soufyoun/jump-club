@@ -734,7 +734,8 @@ window.markPaid = async function(id) {
 };
 
 window.deleteInscription = async function(id) {
-    if (!confirm('Supprimer cette inscription ?')) return;
+    const ok = window.confirm('Supprimer cette inscription ?');
+    if (!ok) return;
     try {
         await fetch(`${SUPABASE_URL}/rest/v1/inscriptions?id=eq.${id}`, {
             method: 'DELETE',
