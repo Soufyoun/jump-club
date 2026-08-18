@@ -794,15 +794,9 @@ window.exportCSV = async function() {
         subGroups[gKey].push(i);
     });
 
-    const groupKeys = Object.keys(subGroups);
-    if (groupKeys.length <= 1) {
-        downloadFile(buildCSV(filtered), fileName + '.csv', 'text/csv');
-    } else {
-        groupKeys.forEach(g => {
-            const safeName = g.replace(/[^a-zA-Z0-9àéèêëïôùûüç ]/g, '').replace(/ /g, '_');
-            downloadFile(buildCSV(subGroups[g]), fileName + '_' + safeName + '.csv', 'text/csv');
-        });
-    }
+    // Sort by group name for clean Excel grouping
+    filtered.sort((a, b) => (a.group_name || '').localeCompare(b.group_name || ''));
+    downloadFile(buildCSV(filtered), fileName + '.csv', 'text/csv');
 };
 
 window.exportJSON = async function() {
