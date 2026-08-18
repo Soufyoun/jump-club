@@ -128,7 +128,10 @@ if (_actSelect && _perSelect) {
                 { value: 'ete-s7', text: 'Été — Semaine 7' },
                 { value: 'toussaint-s1', text: 'Toussaint — Semaine 1' },
                 { value: 'toussaint-s2', text: 'Toussaint — Semaine 2' },
-                { value: 'toussaint-2sem', text: 'Toussaint — 2 semaines' }
+                { value: 'toussaint-2sem', text: 'Toussaint — 2 semaines' },
+                { value: 'noel-s1', text: 'Noël — Semaine 1' },
+                { value: 'noel-s2', text: 'Noël — Semaine 2' },
+                { value: 'noel-2sem', text: 'Noël — 2 semaines' }
             ];
             periods.forEach(p => {
                 const opt = document.createElement('option');
