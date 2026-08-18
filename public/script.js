@@ -81,17 +81,18 @@ function assignGroup(activity, age) {
 }
 
 function getPrice(activity, period) {
-    const prices = {
-        'natation-ixelles': { 'saison-2026-2027': 250 },
-        'natation-molenbeek': { 'saison-2026-2027': 210 },
-        'stage-start-molenbeek': { carnaval: 70, paques: 70, ete: 70, toussaint: 70 },
-        'stage-boost-molenbeek': { carnaval: 80, paques: 80, ete: 80, toussaint: 80 },
-        'stage-go-molenbeek': { carnaval: 90, paques: 90, ete: 90, toussaint: 90 },
-        'stage-start-uccle': { carnaval: 90, paques: 90, ete: 90, toussaint: 90 },
-        'stage-boost-uccle': { carnaval: 100, paques: 100, ete: 100, toussaint: 100 },
-        'stage-go-uccle': { carnaval: 110, paques: 110, ete: 110, toussaint: 110 },
+    const basePrices = {
+        'natation-ixelles': 250,
+        'natation-molenbeek': 210,
+        'stage-start-molenbeek': 70,
+        'stage-boost-molenbeek': 80,
+        'stage-go-molenbeek': 90,
+        'stage-start-uccle': 90,
+        'stage-boost-uccle': 100,
+        'stage-go-uccle': 110,
     };
-    return prices[activity]?.[period] || 0;
+    if (!activity || !period) return 0;
+    return basePrices[activity] || 0;
 }
 
 // --- DYNAMIC PERIOD SELECT ---
