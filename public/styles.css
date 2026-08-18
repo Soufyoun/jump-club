@@ -2412,27 +2412,7 @@ img { max-width: 100%; height: auto; display: block; }
    ADMIN PANEL STYLES
    ============================================ */
 .admin-trigger {
-    position: fixed;
-    bottom: 90px;
-    right: 24px;
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: var(--orange);
-    color: var(--white);
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: var(--shadow-lg);
-    z-index: 999;
-    transition: var(--transition);
-}
-
-.admin-trigger:hover {
-    transform: scale(1.1);
-    box-shadow: var(--shadow-orange);
+    display: none;
 }
 
 .admin-panel {
