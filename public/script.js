@@ -111,36 +111,55 @@ if (_actSelect && _perSelect) {
             opt.selected = true;
             _perSelect.appendChild(opt);
         } else {
-            const periods = [
-                { value: '', text: 'Choisir une période', disabled: true, selected: true },
-                { value: 'carnaval-s1', text: 'Carnaval — Semaine 1' },
-                { value: 'carnaval-s2', text: 'Carnaval — Semaine 2' },
-                { value: 'carnaval-2sem', text: 'Carnaval — 2 semaines' },
-                { value: 'paques-s1', text: 'Pâques — Semaine 1' },
-                { value: 'paques-s2', text: 'Pâques — Semaine 2' },
-                { value: 'paques-2sem', text: 'Pâques — 2 semaines' },
-                { value: 'ete-s1', text: 'Été — Semaine 1' },
-                { value: 'ete-s2', text: 'Été — Semaine 2' },
-                { value: 'ete-s3', text: 'Été — Semaine 3' },
-                { value: 'ete-s4', text: 'Été — Semaine 4' },
-                { value: 'ete-s5', text: 'Été — Semaine 5' },
-                { value: 'ete-s6', text: 'Été — Semaine 6' },
-                { value: 'ete-s7', text: 'Été — Semaine 7' },
-                { value: 'toussaint-s1', text: 'Toussaint — Semaine 1' },
-                { value: 'toussaint-s2', text: 'Toussaint — Semaine 2' },
-                { value: 'toussaint-2sem', text: 'Toussaint — 2 semaines' },
-                { value: 'noel-s1', text: 'Noël — Semaine 1' },
-                { value: 'noel-s2', text: 'Noël — Semaine 2' },
-                { value: 'noel-2sem', text: 'Noël — 2 semaines' }
-            ];
-            periods.forEach(p => {
-                const opt = document.createElement('option');
-                opt.value = p.value;
-                opt.textContent = p.text;
-                if (p.disabled) opt.disabled = true;
-                if (p.selected) opt.selected = true;
-                _perSelect.appendChild(opt);
-            });
+            const defOpt = document.createElement('option');
+            defOpt.value = '';
+            defOpt.textContent = 'Choisir une période';
+            defOpt.disabled = true;
+            defOpt.selected = true;
+            _perSelect.appendChild(defOpt);
+
+            const groups = {
+                'Été': [
+                    { value: 'ete-s1', text: 'Semaine 1' },
+                    { value: 'ete-s2', text: 'Semaine 2' },
+                    { value: 'ete-s3', text: 'Semaine 3' },
+                    { value: 'ete-s4', text: 'Semaine 4' },
+                    { value: 'ete-s5', text: 'Semaine 5' },
+                    { value: 'ete-s6', text: 'Semaine 6' },
+                    { value: 'ete-s7', text: 'Semaine 7' }
+                ],
+                'Toussaint': [
+                    { value: 'toussaint-s1', text: 'Semaine 1' },
+                    { value: 'toussaint-s2', text: 'Semaine 2' },
+                    { value: 'toussaint-2sem', text: '2 semaines' }
+                ],
+                'Noël': [
+                    { value: 'noel-s1', text: 'Semaine 1' },
+                    { value: 'noel-s2', text: 'Semaine 2' },
+                    { value: 'noel-2sem', text: '2 semaines' }
+                ],
+                'Carnaval': [
+                    { value: 'carnaval-s1', text: 'Semaine 1' },
+                    { value: 'carnaval-s2', text: 'Semaine 2' },
+                    { value: 'carnaval-2sem', text: '2 semaines' }
+                ],
+                'Pâques': [
+                    { value: 'paques-s1', text: 'Semaine 1' },
+                    { value: 'paques-s2', text: 'Semaine 2' },
+                    { value: 'paques-2sem', text: '2 semaines' }
+                ]
+            };
+            for (const [label, options] of Object.entries(groups)) {
+                const og = document.createElement('optgroup');
+                og.label = label;
+                options.forEach(p => {
+                    const opt = document.createElement('option');
+                    opt.value = p.value;
+                    opt.textContent = p.text;
+                    og.appendChild(opt);
+                });
+                _perSelect.appendChild(og);
+            }
         }
     });
 }
