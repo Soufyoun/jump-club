@@ -32,7 +32,7 @@ module.exports = async (req, res) => {
 
         // Email au parent
         await resend.emails.send({
-            from: 'Jump Stage <onboarding@resend.dev>',
+            from: 'Jump Stage <noreply@jumpstage.be>',
             to: parentEmail,
             subject: `Confirmation d'inscription — ${childName} ${childLastName || ''}`,
             html: `
@@ -58,7 +58,7 @@ module.exports = async (req, res) => {
 
         // Notification à l'admin
         await resend.emails.send({
-            from: 'Jump Stage <onboarding@resend.dev>',
+            from: 'Jump Stage <noreply@jumpstage.be>',
             to: 'info.jumpasbl@gmail.com',
             subject: `Nouvelle inscription — ${childName} ${childLastName || ''} — ${actLabel}`,
             html: `
