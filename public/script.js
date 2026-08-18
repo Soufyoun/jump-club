@@ -111,10 +111,19 @@ if (_actSelect && _perSelect) {
         } else {
             const periods = [
                 { value: '', text: 'Choisir une période', disabled: true, selected: true },
-                { value: 'carnaval', text: 'Stage Carnaval' },
-                { value: 'paques', text: 'Stage Pâques' },
-                { value: 'ete', text: 'Stage Été' },
-                { value: 'toussaint', text: 'Stage Toussaint' }
+                { value: 'carnaval-s1', text: 'Carnaval — Semaine 1' },
+                { value: 'carnaval-s2', text: 'Carnaval — Semaine 2' },
+                { value: 'paques-s1', text: 'Pâques — Semaine 1' },
+                { value: 'paques-s2', text: 'Pâques — Semaine 2' },
+                { value: 'ete-s1', text: 'Été — Semaine 1' },
+                { value: 'ete-s2', text: 'Été — Semaine 2' },
+                { value: 'ete-s3', text: 'Été — Semaine 3' },
+                { value: 'ete-s4', text: 'Été — Semaine 4' },
+                { value: 'ete-s5', text: 'Été — Semaine 5' },
+                { value: 'ete-s6', text: 'Été — Semaine 6' },
+                { value: 'ete-s7', text: 'Été — Semaine 7' },
+                { value: 'toussaint-s1', text: 'Toussaint — Semaine 1' },
+                { value: 'toussaint-s2', text: 'Toussaint — Semaine 2' }
             ];
             periods.forEach(p => {
                 const opt = document.createElement('option');
