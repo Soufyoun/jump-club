@@ -557,9 +557,21 @@ function periodLabel(p) {
     return map[p] || p;
 }
 
+let adminUnlocked = false;
+
 window.toggleAdmin = function() {
     const panel = document.getElementById('adminPanel');
     const overlay = document.getElementById('adminOverlay');
+
+    if (!adminUnlocked && !panel.classList.contains('open')) {
+        const pwd = prompt('Mot de passe administrateur :');
+        if (pwd !== 'Yousouf1080') {
+            alert('Mot de passe incorrect.');
+            return;
+        }
+        adminUnlocked = true;
+    }
+
     panel.classList.toggle('open');
     overlay.classList.toggle('active');
     if (panel.classList.contains('open')) {
