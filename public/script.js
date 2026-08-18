@@ -30,11 +30,14 @@ async function getInscriptions() {
 async function saveInscription(data) {
     const row = {
         child_name: data.childName,
+        child_last_name: data.childLastName || '',
         child_age: parseInt(data.childAge),
         activity: data.activity,
         period: data.period,
         group_name: assignGroup(data.activity, data.childAge),
+        swim_group: data.swimGroup || '',
         parent_name: data.parentName,
+        parent_last_name: data.parentLastName || '',
         parent_email: data.parentEmail,
         parent_phone: data.parentPhone,
         message: data.message || '',
@@ -747,22 +750,70 @@ window.deleteInscription = async function(id) {
     updateAdminPanel();
 };
 
+function buildCSV(list) {
+    const headers = ['Nom enfant', 'Prénom enfant', 'Âge', 'Groupe/Niveau', 'Activité', 'Période', 'Nom parent', 'Email', 'Téléphone', 'Prix', 'Paiement', 'Statut', 'Date inscription'];
+    const rows = list.map(i => [
+        i.child_last_name || '', i.child_name || '', i.child_age || '',
+        i.swim_group || i.group_name || '', activityLabel(i.activity), i.period || '',
+        (i.parent_last_name || '') + ' ' + (i.parent_name || ''),
+        i.parent_email || '', i.parent_phone || '',
+        i.price || 0, i.payment_method || '', i.payment_status || '',
+        i.created_at ? new Date(i.created_at).toLocaleDateString('fr-BE') : ''
+    ]);
+    return [headers.join(';'), ...rows.map(r => r.map(v => '"' + String(v).replace(/"/g, '""') + '"').join(';'))].join('\n');
+}
+
 window.exportCSV = async function() {
     const inscriptions = await getInscriptions();
-    if (inscriptions.length === 0) return alert('Aucune donnee a exporter.');
-    const headers = ['ID', 'Date', 'Enfant', 'Age', 'Activite', 'Periode', 'Groupe', 'Parent', 'Email', 'Telephone', 'Prix', 'Paiement', 'Statut'];
-    const rows = inscriptions.map(i => [
-        i.id, new Date(i.created_at).toLocaleDateString('fr-BE'), i.child_name, i.child_age,
-        i.activity, i.period, i.group_name, i.parent_name, i.parent_email, i.parent_phone,
-        i.price, i.payment_method, i.payment_status
-    ]);
-    const csv = [headers.join(';'), ...rows.map(r => r.join(';'))].join('\n');
-    downloadFile(csv, 'inscriptions_jump.csv', 'text/csv');
+    if (inscriptions.length === 0) return alert('Aucune donnée à exporter.');
+
+    const tab = currentFilter;
+    let filtered = inscriptions;
+    switch(tab) {
+        case 'natation-ixelles': filtered = filtered.filter(i => i.activity === 'natation-ixelles'); break;
+        case 'natation-molenbeek': filtered = filtered.filter(i => i.activity === 'natation-molenbeek' || i.activity === 'natation-molenbeek-2x'); break;
+        case 'stage-molenbeek': filtered = filtered.filter(i => i.activity?.startsWith('stage') && i.activity?.includes('molenbeek')); break;
+        case 'stage-uccle': filtered = filtered.filter(i => i.activity?.startsWith('stage') && i.activity?.includes('uccle')); break;
+    }
+
+    if (filtered.length === 0) return alert('Aucune inscription dans cet onglet.');
+
+    const tabNames = {
+        'natation-ixelles': 'Natation_Ixelles',
+        'natation-molenbeek': 'Natation_Molenbeek',
+        'stage-molenbeek': 'Stages_Molenbeek',
+        'stage-uccle': 'Stages_Uccle',
+        'all': 'Toutes_inscriptions'
+    };
+    const fileName = tabNames[tab] || 'inscriptions';
+
+    if (tab === 'all') {
+        downloadFile(buildCSV(filtered), fileName + '.csv', 'text/csv');
+        return;
+    }
+
+    // Group by sub-group
+    const subGroups = {};
+    filtered.forEach(i => {
+        let gKey = i.swim_group || i.group_name || 'Sans groupe';
+        if (!subGroups[gKey]) subGroups[gKey] = [];
+        subGroups[gKey].push(i);
+    });
+
+    const groupKeys = Object.keys(subGroups);
+    if (groupKeys.length <= 1) {
+        downloadFile(buildCSV(filtered), fileName + '.csv', 'text/csv');
+    } else {
+        groupKeys.forEach(g => {
+            const safeName = g.replace(/[^a-zA-Z0-9àéèêëïôùûüç ]/g, '').replace(/ /g, '_');
+            downloadFile(buildCSV(subGroups[g]), fileName + '_' + safeName + '.csv', 'text/csv');
+        });
+    }
 };
 
 window.exportJSON = async function() {
     const inscriptions = await getInscriptions();
-    if (inscriptions.length === 0) return alert('Aucune donnee a exporter.');
+    if (inscriptions.length === 0) return alert('Aucune donnée à exporter.');
     downloadFile(JSON.stringify(inscriptions, null, 2), 'inscriptions_jump.json', 'application/json');
 };
 
