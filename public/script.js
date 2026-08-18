@@ -92,7 +92,8 @@ function getPrice(activity, period) {
         'stage-go-uccle': 110,
     };
     if (!activity || !period) return 0;
-    return basePrices[activity] || 0;
+    const base = basePrices[activity] || 0;
+    return period.endsWith('-2sem') ? base * 2 : base;
 }
 
 // --- DYNAMIC PERIOD SELECT ---
@@ -114,8 +115,10 @@ if (_actSelect && _perSelect) {
                 { value: '', text: 'Choisir une période', disabled: true, selected: true },
                 { value: 'carnaval-s1', text: 'Carnaval — Semaine 1' },
                 { value: 'carnaval-s2', text: 'Carnaval — Semaine 2' },
+                { value: 'carnaval-2sem', text: 'Carnaval — 2 semaines' },
                 { value: 'paques-s1', text: 'Pâques — Semaine 1' },
                 { value: 'paques-s2', text: 'Pâques — Semaine 2' },
+                { value: 'paques-2sem', text: 'Pâques — 2 semaines' },
                 { value: 'ete-s1', text: 'Été — Semaine 1' },
                 { value: 'ete-s2', text: 'Été — Semaine 2' },
                 { value: 'ete-s3', text: 'Été — Semaine 3' },
@@ -124,7 +127,8 @@ if (_actSelect && _perSelect) {
                 { value: 'ete-s6', text: 'Été — Semaine 6' },
                 { value: 'ete-s7', text: 'Été — Semaine 7' },
                 { value: 'toussaint-s1', text: 'Toussaint — Semaine 1' },
-                { value: 'toussaint-s2', text: 'Toussaint — Semaine 2' }
+                { value: 'toussaint-s2', text: 'Toussaint — Semaine 2' },
+                { value: 'toussaint-2sem', text: 'Toussaint — 2 semaines' }
             ];
             periods.forEach(p => {
                 const opt = document.createElement('option');
