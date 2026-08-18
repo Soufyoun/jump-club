@@ -6,6 +6,7 @@
     "dev": "npx serve public -l 3457"
   },
   "dependencies": {
-    "@mollie/api-client": "^4.4.0"
+    "@mollie/api-client": "^4.4.0",
+    "resend": "^4.0.0"
   }
 }

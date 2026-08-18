@@ -322,6 +322,26 @@ if (inscriptionForm) {
         const saved = await saveInscription(data);
         console.log('Inscription saved:', saved);
 
+        // Send confirmation email
+        try {
+            await fetch('/api/send-confirmation', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    parentEmail: data.parentEmail,
+                    parentName: (data.parentLastName || '') + ' ' + (data.parentName || ''),
+                    childName: data.childName,
+                    childLastName: data.childLastName,
+                    childAge: data.childAge,
+                    activity: data.activity,
+                    period: data.period,
+                    paymentMethod: data.paymentMethod
+                })
+            });
+        } catch (err) {
+            console.error('Email error:', err);
+        }
+
         // If online payment selected, redirect to Mollie
         if (data.paymentMethod === 'online') {
             try {
