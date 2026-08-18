@@ -104,6 +104,49 @@ if (_actSelect && _perSelect) {
         const val = this.value;
         const isNatation = val.startsWith('natation');
         _perSelect.innerHTML = '';
+
+        // Groupe natation
+        const groupSection = document.getElementById('groupSection');
+        const swimGroup = document.getElementById('swimGroup');
+        if (groupSection && swimGroup) {
+            swimGroup.innerHTML = '';
+            if (val === 'natation-molenbeek') {
+                groupSection.style.display = 'block';
+                const groups = [
+                    { value: '', text: 'Choisir un groupe', disabled: true, selected: true },
+                    { value: 'blanc', text: 'Groupe Blanc — Découverte du milieu aquatique, immersion, flottaison' },
+                    { value: 'jaune', text: 'Groupe Jaune — Autonomie en petite profondeur, préparation grande profondeur' },
+                    { value: 'rouge', text: 'Groupe Rouge — Techniques de nage en grande profondeur (crawl, dos, brasse)' },
+                    { value: 'vert', text: 'Groupe Vert — Maîtrise en grande profondeur, perfectionnement, initiation papillon' }
+                ];
+                groups.forEach(g => {
+                    const opt = document.createElement('option');
+                    opt.value = g.value;
+                    opt.textContent = g.text;
+                    if (g.disabled) opt.disabled = true;
+                    if (g.selected) opt.selected = true;
+                    swimGroup.appendChild(opt);
+                });
+            } else if (val === 'natation-ixelles') {
+                groupSection.style.display = 'block';
+                const groups = [
+                    { value: '', text: 'Choisir un niveau', disabled: true, selected: true },
+                    { value: 'debutant', text: 'Débutant — Premier contact avec l\'eau, familiarisation, jeux aquatiques' },
+                    { value: 'moyen', text: 'Moyen — Apprentissage des nages, autonomie dans l\'eau' },
+                    { value: 'fort', text: 'Fort — Perfectionnement des techniques, endurance, plongeons' }
+                ];
+                groups.forEach(g => {
+                    const opt = document.createElement('option');
+                    opt.value = g.value;
+                    opt.textContent = g.text;
+                    if (g.disabled) opt.disabled = true;
+                    if (g.selected) opt.selected = true;
+                    swimGroup.appendChild(opt);
+                });
+            } else {
+                groupSection.style.display = 'none';
+            }
+        }
         if (isNatation) {
             const opt = document.createElement('option');
             opt.value = 'saison-2026-2027';
