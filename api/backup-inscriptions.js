@@ -20,7 +20,11 @@ module.exports = async (req, res) => {
         });
         const inscriptions = await response.json();
 
-        if (!inscriptions || inscriptions.length === 0) {
+        if (!Array.isArray(inscriptions)) {
+            return res.status(500).json({ error: 'Supabase error', details: inscriptions });
+        }
+
+        if (inscriptions.length === 0) {
             return res.status(200).json({ message: 'No data to backup' });
         }
 
