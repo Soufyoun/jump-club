@@ -84,6 +84,7 @@ function getPrice(activity, period) {
     const basePrices = {
         'natation-ixelles': 250,
         'natation-molenbeek': 210,
+        'natation-molenbeek-2x': 300,
         'stage-start-molenbeek': 70,
         'stage-boost-molenbeek': 80,
         'stage-go-molenbeek': 90,
@@ -111,6 +112,23 @@ if (_actSelect && _perSelect) {
         if (groupSection && swimGroup) {
             swimGroup.innerHTML = '';
             if (val === 'natation-molenbeek') {
+                groupSection.style.display = 'block';
+                const groups = [
+                    { value: '', text: 'Choisir un groupe', disabled: true, selected: true },
+                    { value: 'blanc', text: 'Groupe Blanc — Découverte du milieu aquatique, immersion, flottaison' },
+                    { value: 'jaune', text: 'Groupe Jaune — Autonomie en petite profondeur, préparation grande profondeur' },
+                    { value: 'rouge', text: 'Groupe Rouge — Techniques de nage en grande profondeur (crawl, dos, brasse)' },
+                    { value: 'vert', text: 'Groupe Vert — Maîtrise en grande profondeur, perfectionnement, initiation papillon' }
+                ];
+                groups.forEach(g => {
+                    const opt = document.createElement('option');
+                    opt.value = g.value;
+                    opt.textContent = g.text;
+                    if (g.disabled) opt.disabled = true;
+                    if (g.selected) opt.selected = true;
+                    swimGroup.appendChild(opt);
+                });
+            } else if (val === 'natation-molenbeek-2x') {
                 groupSection.style.display = 'block';
                 const groups = [
                     { value: '', text: 'Choisir un groupe', disabled: true, selected: true },
