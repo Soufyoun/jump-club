@@ -199,6 +199,74 @@ if (_actSelect && _perSelect) {
                     });
                     timeSlot.appendChild(og);
                 }
+            } else if (val === 'natation-molenbeek' || val === 'natation-molenbeek-2x') {
+                slotSection.style.display = 'block';
+                const defOpt = document.createElement('option');
+                defOpt.value = '';
+                defOpt.textContent = 'Choisir un créneau';
+                defOpt.disabled = true;
+                defOpt.selected = true;
+                timeSlot.appendChild(defOpt);
+
+                if (val === 'natation-molenbeek') {
+                    // 1x/semaine : 1 demi-heure au choix
+                    const og1 = document.createElement('optgroup');
+                    og1.label = 'Lundi (1 séance de 30 min)';
+                    const optL1 = document.createElement('option');
+                    optL1.value = 'lundi-16h00-16h30';
+                    optL1.textContent = 'Lundi 16h00 - 16h30';
+                    og1.appendChild(optL1);
+                    const optL2 = document.createElement('option');
+                    optL2.value = 'lundi-16h30-17h00';
+                    optL2.textContent = 'Lundi 16h30 - 17h00';
+                    og1.appendChild(optL2);
+                    timeSlot.appendChild(og1);
+
+                    const og2 = document.createElement('optgroup');
+                    og2.label = 'Vendredi (1 séance de 30 min)';
+                    const optV1 = document.createElement('option');
+                    optV1.value = 'vendredi-16h00-16h30';
+                    optV1.textContent = 'Vendredi 16h00 - 16h30';
+                    og2.appendChild(optV1);
+                    const optV2 = document.createElement('option');
+                    optV2.value = 'vendredi-16h30-17h00';
+                    optV2.textContent = 'Vendredi 16h30 - 17h00';
+                    og2.appendChild(optV2);
+                    timeSlot.appendChild(og2);
+                } else {
+                    // 2x/semaine : 1h le même jour OU 30min lundi + 30min vendredi
+                    const og1 = document.createElement('optgroup');
+                    og1.label = '1h le même jour';
+                    const opt1 = document.createElement('option');
+                    opt1.value = 'lundi-16h00-17h00';
+                    opt1.textContent = 'Lundi 16h00 - 17h00 (1h)';
+                    og1.appendChild(opt1);
+                    const opt2 = document.createElement('option');
+                    opt2.value = 'vendredi-16h00-17h00';
+                    opt2.textContent = 'Vendredi 16h00 - 17h00 (1h)';
+                    og1.appendChild(opt2);
+                    timeSlot.appendChild(og1);
+
+                    const og2 = document.createElement('optgroup');
+                    og2.label = '30 min Lundi + 30 min Vendredi';
+                    const opt3 = document.createElement('option');
+                    opt3.value = 'lundi-16h00+vendredi-16h00';
+                    opt3.textContent = 'Lun 16h00-16h30 + Ven 16h00-16h30';
+                    og2.appendChild(opt3);
+                    const opt4 = document.createElement('option');
+                    opt4.value = 'lundi-16h00+vendredi-16h30';
+                    opt4.textContent = 'Lun 16h00-16h30 + Ven 16h30-17h00';
+                    og2.appendChild(opt4);
+                    const opt5 = document.createElement('option');
+                    opt5.value = 'lundi-16h30+vendredi-16h00';
+                    opt5.textContent = 'Lun 16h30-17h00 + Ven 16h00-16h30';
+                    og2.appendChild(opt5);
+                    const opt6 = document.createElement('option');
+                    opt6.value = 'lundi-16h30+vendredi-16h30';
+                    opt6.textContent = 'Lun 16h30-17h00 + Ven 16h30-17h00';
+                    og2.appendChild(opt6);
+                    timeSlot.appendChild(og2);
+                }
             } else {
                 slotSection.style.display = 'none';
             }
