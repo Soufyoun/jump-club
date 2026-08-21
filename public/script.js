@@ -168,6 +168,41 @@ if (_actSelect && _perSelect) {
                 groupSection.style.display = 'none';
             }
         }
+
+        // Créneaux horaires
+        const slotSection = document.getElementById('slotSection');
+        const timeSlot = document.getElementById('timeSlot');
+        if (slotSection && timeSlot) {
+            timeSlot.innerHTML = '';
+            if (val === 'natation-ixelles') {
+                slotSection.style.display = 'block';
+                const defOpt = document.createElement('option');
+                defOpt.value = '';
+                defOpt.textContent = 'Choisir un créneau';
+                defOpt.disabled = true;
+                defOpt.selected = true;
+                timeSlot.appendChild(defOpt);
+
+                const slots = {
+                    'Vendredi': ['19h30 - 20h00', '20h00 - 20h30'],
+                    'Samedi': ['13h30 - 14h00', '14h00 - 14h30', '14h30 - 15h00', '15h00 - 15h30', '15h30 - 16h00'],
+                    'Dimanche': ['10h00 - 10h30', '10h30 - 11h00', '11h00 - 11h30', '11h30 - 12h00']
+                };
+                for (const [jour, creneaux] of Object.entries(slots)) {
+                    const og = document.createElement('optgroup');
+                    og.label = jour;
+                    creneaux.forEach(c => {
+                        const opt = document.createElement('option');
+                        opt.value = jour.toLowerCase() + '-' + c.replace(/\s/g, '');
+                        opt.textContent = c;
+                        og.appendChild(opt);
+                    });
+                    timeSlot.appendChild(og);
+                }
+            } else {
+                slotSection.style.display = 'none';
+            }
+        }
         if (isNatation) {
             const opt = document.createElement('option');
             opt.value = 'saison-2026-2027';
