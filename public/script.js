@@ -523,13 +523,17 @@ if (inscriptionForm) {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     parentEmail: data.parentEmail,
-                    parentName: (data.parentLastName || '') + ' ' + (data.parentName || ''),
+                    parentName: data.parentName,
+                    parentLastName: data.parentLastName,
+                    parentPhone: data.parentPhone,
                     childName: data.childName,
                     childLastName: data.childLastName,
                     childAge: data.childAge,
                     activity: data.activity,
                     period: data.period,
-                    paymentMethod: data.paymentMethod
+                    paymentMethod: data.paymentMethod,
+                    swimGroup: data.swimGroup || '',
+                    timeSlot: data.timeSlot || ''
                 })
             });
         } catch (err) {

@@ -10,7 +10,7 @@ module.exports = async (req, res) => {
 
     try {
         const resend = new Resend(process.env.RESEND_API_KEY);
-        const { parentEmail, parentName, childName, childLastName, childAge, activity, period, paymentMethod } = req.body;
+        const { parentEmail, parentName, parentLastName, childName, childLastName, childAge, activity, period, paymentMethod, swimGroup, timeSlot } = req.body;
 
         if (!parentEmail || !childName) {
             return res.status(400).json({ error: 'Missing fields' });
@@ -27,8 +27,17 @@ module.exports = async (req, res) => {
             'stage-go-uccle': 'Jumpy Go (7-12 ans) — Uccle'
         };
 
+        activityLabels['natation-molenbeek-2x'] = 'Natation — Molenbeek (2x/semaine)';
+
         const actLabel = activityLabels[activity] || activity;
         const paiement = paymentMethod === 'online' ? 'Paiement en ligne' : 'Paiement en cash';
+
+        const groupLabels = {
+            'blanc': 'Groupe Blanc', 'jaune': 'Groupe Jaune', 'rouge': 'Groupe Rouge', 'vert': 'Groupe Vert',
+            'debutant': 'Débutant', 'moyen': 'Moyen', 'fort': 'Fort'
+        };
+        const groupLabel = swimGroup ? (groupLabels[swimGroup] || swimGroup) : '';
+        const slotLabel = timeSlot ? timeSlot.replace(/-/g, ' ').replace(/\+/g, ' + ') : '';
 
         // Email au parent
         await resend.emails.send({
@@ -47,6 +56,8 @@ module.exports = async (req, res) => {
                         <h3 style="color:#FF6B35;margin-top:0;">Récapitulatif</h3>
                         <p><strong>Activité :</strong> ${actLabel}</p>
                         <p><strong>Période :</strong> ${period || ''}</p>
+                        ${groupLabel ? `<p><strong>Groupe / Niveau :</strong> ${groupLabel}</p>` : ''}
+                        ${slotLabel ? `<p><strong>Créneau :</strong> ${slotLabel}</p>` : ''}
                         <p><strong>Paiement :</strong> ${paiement}</p>
                     </div>
                     ${paymentMethod === 'cash' ? '<p style="background:#FFF3E0;padding:15px;border-radius:8px;border-left:4px solid #FF6B35;"><strong>⚠️ Rappel :</strong> Votre inscription ne sera validée qu\'après confirmation par un administrateur. Prenez rendez-vous par email à <a href="mailto:info.jumpasbl@gmail.com" style="color:#FF6B35;">info.jumpasbl@gmail.com</a></p>' : ''}
@@ -64,11 +75,14 @@ module.exports = async (req, res) => {
             html: `
                 <div style="font-family:Arial,sans-serif;padding:20px;">
                     <h2 style="color:#FF6B35;">Nouvelle inscription</h2>
-                    <p><strong>Enfant :</strong> ${childName} ${childLastName || ''} (${childAge || ''} ans)</p>
-                    <p><strong>Parent :</strong> ${parentName || ''}</p>
+                    <p><strong>Enfant :</strong> ${childLastName || ''} ${childName || ''} (${childAge || ''} ans)</p>
+                    <p><strong>Parent :</strong> ${parentLastName || ''} ${parentName || ''}</p>
                     <p><strong>Email :</strong> ${parentEmail}</p>
+                    <p><strong>Téléphone :</strong> ${req.body.parentPhone || ''}</p>
                     <p><strong>Activité :</strong> ${actLabel}</p>
                     <p><strong>Période :</strong> ${period || ''}</p>
+                    ${groupLabel ? `<p><strong>Groupe / Niveau :</strong> ${groupLabel}</p>` : ''}
+                    ${slotLabel ? `<p><strong>Créneau :</strong> ${slotLabel}</p>` : ''}
                     <p><strong>Paiement :</strong> ${paiement}</p>
                 </div>
             `
