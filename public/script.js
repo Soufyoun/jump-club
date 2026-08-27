@@ -36,6 +36,7 @@ async function saveInscription(data) {
         period: data.period,
         group_name: assignGroup(data.activity, data.childAge),
         swim_group: data.swimGroup || '',
+        time_slot: data.timeSlot || '',
         parent_name: data.parentName,
         parent_last_name: data.parentLastName || '',
         parent_email: data.parentEmail,
@@ -806,6 +807,8 @@ async function updateAdminPanel() {
                         <span class="fiche-label">Periode</span>
                         <span class="fiche-value">${periodLabel(m.period)}</span>
                     </div>
+                    ${m.swim_group ? `<div class="fiche-row"><span class="fiche-label">Groupe</span><span class="fiche-value">${m.swim_group}</span></div>` : ''}
+                    ${m.time_slot ? `<div class="fiche-row"><span class="fiche-label">Créneau</span><span class="fiche-value">${m.time_slot.replace(/-/g, ' ').replace(/\+/g, ' + ')}</span></div>` : ''}
                     <div class="fiche-row">
                         <span class="fiche-label">Parent</span>
                         <span class="fiche-value">${m.parent_name || '-'}</span>
@@ -863,10 +866,10 @@ window.deleteInscription = async function(id) {
 };
 
 function buildCSV(list) {
-    const headers = ['Nom enfant', 'Prénom enfant', 'Âge', 'Groupe/Niveau', 'Activité', 'Période', 'Nom parent', 'Email', 'Téléphone', 'Prix', 'Paiement', 'Statut', 'Date inscription'];
+    const headers = ['Nom enfant', 'Prénom enfant', 'Âge', 'Groupe/Niveau', 'Créneau', 'Activité', 'Période', 'Nom parent', 'Email', 'Téléphone', 'Prix', 'Paiement', 'Statut', 'Date inscription'];
     const rows = list.map(i => [
         i.child_last_name || '', i.child_name || '', i.child_age || '',
-        i.swim_group || i.group_name || '', activityLabel(i.activity), i.period || '',
+        i.swim_group || i.group_name || '', (i.time_slot || '').replace(/-/g, ' ').replace(/\+/g, ' + '), activityLabel(i.activity), i.period || '',
         (i.parent_last_name || '') + ' ' + (i.parent_name || ''),
         i.parent_email || '', i.parent_phone || '',
         i.price || 0, i.payment_method || '', i.payment_status || '',
