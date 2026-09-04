@@ -726,7 +726,7 @@ async function updateAdminPanel() {
     let filtered = inscriptions;
     switch(currentFilter) {
         case 'natation-ixelles': filtered = filtered.filter(i => i.activity === 'natation-ixelles'); break;
-        case 'natation-molenbeek': filtered = filtered.filter(i => i.activity === 'natation-molenbeek'); break;
+        case 'natation-molenbeek': filtered = filtered.filter(i => i.activity === 'natation-molenbeek' || i.activity === 'natation-molenbeek-2x'); break;
         case 'stage-molenbeek': filtered = filtered.filter(i => i.activity?.startsWith('stage') && i.activity?.includes('molenbeek')); break;
         case 'stage-uccle': filtered = filtered.filter(i => i.activity?.startsWith('stage') && i.activity?.includes('uccle')); break;
     }
