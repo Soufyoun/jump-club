@@ -4,7 +4,7 @@ const { PDFDocument, StandardFonts, rgb } = require('pdf-lib');
 module.exports = async (req, res) => {
     if (req.method !== 'GET') return res.status(405).end();
 
-    const { type, child, parent, email, activity, period, amount } = req.query;
+    const { type, child, parent, email, activity, period, amount, dateStart, dateEnd, nbDays, dayRate } = req.query;
     if (!email || !child || !type) {
         return res.status(400).send('Paramètres manquants');
     }
@@ -111,10 +111,15 @@ module.exports = async (req, res) => {
 
         // Info box
         y -= 10;
-        const boxH = type === 'fiscale' ? 130 : 110;
+        const boxH = infoLines.length * 22 + 20;
         page.drawRectangle({ x: 50, y: y - boxH + 20, width: w - 100, height: boxH, color: lightBg });
 
         y -= 5;
+        const dateStartVal = decodeURIComponent(dateStart || '');
+        const dateEndVal = decodeURIComponent(dateEnd || '');
+        const nbDaysVal = decodeURIComponent(nbDays || '');
+        const dayRateVal = decodeURIComponent(dayRate || '');
+
         const infoLines = [
             ['Nom de l\'enfant :', childName],
         ];
@@ -123,9 +128,18 @@ module.exports = async (req, res) => {
         }
         infoLines.push(
             ['Activite :', activityName],
-            ['Periode :', periodName],
-            ['Montant paye :', amountVal + ' EUR']
         );
+        if (type === 'fiscale' && dateStartVal && dateEndVal) {
+            infoLines.push(['Periode de garde :', 'du ' + dateStartVal + ' au ' + dateEndVal]);
+            if (nbDaysVal) infoLines.push(['Nombre de jours :', nbDaysVal + ' jours']);
+            infoLines.push(['Montant total paye :', amountVal + ' EUR']);
+            if (dayRateVal) infoLines.push(['Montant par jour :', dayRateVal]);
+        } else {
+            infoLines.push(
+                ['Periode :', periodName],
+                ['Montant paye :', amountVal + ' EUR']
+            );
+        }
 
         infoLines.forEach(([label, value]) => {
             page.drawText(label, { x: 70, y, font: fontBold, size: 12, color: gray });

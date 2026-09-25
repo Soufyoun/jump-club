@@ -8,7 +8,7 @@ module.exports = async (req, res) => {
     if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
     try {
-        const { action, docType, childName, childLastName, parentName, parentEmail, activity, period, amount, requestId } = req.body;
+        const { action, docType, childName, childLastName, parentName, parentEmail, activity, period, amount, dateStart, dateEnd, nbDays, dayRate, requestId } = req.body;
         const resend = new Resend(process.env.RESEND_API_KEY);
 
         const docLabels = {
@@ -19,7 +19,7 @@ module.exports = async (req, res) => {
 
         if (action === 'request') {
             const id = Date.now().toString(36);
-            const approveUrl = `https://www.jumpstage.be/api/send-document?type=${docType}&child=${encodeURIComponent(childName + ' ' + (childLastName || ''))}&parent=${encodeURIComponent(parentName)}&email=${encodeURIComponent(parentEmail)}&activity=${encodeURIComponent(activity || '')}&period=${encodeURIComponent(period || '')}&amount=${encodeURIComponent(amount || '')}`;
+            const approveUrl = `https://www.jumpstage.be/api/send-document?type=${docType}&child=${encodeURIComponent(childName + ' ' + (childLastName || ''))}&parent=${encodeURIComponent(parentName)}&email=${encodeURIComponent(parentEmail)}&activity=${encodeURIComponent(activity || '')}&period=${encodeURIComponent(period || '')}&amount=${encodeURIComponent(amount || '')}&dateStart=${encodeURIComponent(dateStart || '')}&dateEnd=${encodeURIComponent(dateEnd || '')}&nbDays=${encodeURIComponent(nbDays || '')}&dayRate=${encodeURIComponent(dayRate || '')}`;
 
             await resend.emails.send({
                 from: 'Jump Stage <noreply@jumpstage.be>',

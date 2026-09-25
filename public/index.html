@@ -819,8 +819,28 @@
                             <input type="text" id="docActivity" placeholder="Ex: Natation Molenbeek, Stage Toussaint...">
                         </div>
                         <div class="form-group">
-                            <label>Montant payé (€)</label>
+                            <label>Montant total payé (€)</label>
                             <input type="number" id="docAmount" placeholder="Ex: 210">
+                        </div>
+                        <div id="fiscalFields" style="display:none;">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Date début</label>
+                                    <input type="date" id="docDateStart">
+                                </div>
+                                <div class="form-group">
+                                    <label>Date fin</label>
+                                    <input type="date" id="docDateEnd">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Nombre de jours de garde</label>
+                                <input type="number" id="docNbDays" placeholder="Ex: 5">
+                            </div>
+                            <div class="form-group">
+                                <label>Montant par jour (€) — calculé automatiquement</label>
+                                <input type="text" id="docDayRate" readonly style="background:#f4f4f8;">
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-primary btn-lg" style="width:100%;">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>

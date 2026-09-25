@@ -562,6 +562,25 @@ document.getElementById('successModal').addEventListener('click', (e) => {
 });
 
 // --- DOCUMENT REQUEST ---
+const docTypeSelect = document.getElementById('docType');
+if (docTypeSelect) {
+    docTypeSelect.addEventListener('change', function() {
+        const fiscalFields = document.getElementById('fiscalFields');
+        if (fiscalFields) fiscalFields.style.display = this.value === 'fiscale' ? 'block' : 'none';
+    });
+}
+const docAmountInput = document.getElementById('docAmount');
+const docNbDaysInput = document.getElementById('docNbDays');
+if (docAmountInput && docNbDaysInput) {
+    function calcDayRate() {
+        const total = parseFloat(docAmountInput.value) || 0;
+        const days = parseInt(docNbDaysInput.value) || 0;
+        const rateEl = document.getElementById('docDayRate');
+        if (rateEl) rateEl.value = days > 0 ? (total / days).toFixed(2) + '€/jour' : '';
+    }
+    docAmountInput.addEventListener('input', calcDayRate);
+    docNbDaysInput.addEventListener('input', calcDayRate);
+}
 const docForm = document.getElementById('docRequestForm');
 if (docForm) {
     docForm.addEventListener('submit', async (e) => {
@@ -584,7 +603,11 @@ if (docForm) {
                     parentName: document.getElementById('docParentName').value,
                     parentEmail: document.getElementById('docEmail').value,
                     activity: document.getElementById('docActivity').value,
-                    amount: document.getElementById('docAmount').value
+                    amount: document.getElementById('docAmount').value,
+                    dateStart: document.getElementById('docDateStart')?.value || '',
+                    dateEnd: document.getElementById('docDateEnd')?.value || '',
+                    nbDays: document.getElementById('docNbDays')?.value || '',
+                    dayRate: document.getElementById('docDayRate')?.value || ''
                 })
             });
             const data = await res.json();
