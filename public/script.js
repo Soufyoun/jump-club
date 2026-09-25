@@ -561,6 +561,50 @@ document.getElementById('successModal').addEventListener('click', (e) => {
     if (e.target === e.currentTarget) closeModal();
 });
 
+// --- DOCUMENT REQUEST ---
+const docForm = document.getElementById('docRequestForm');
+if (docForm) {
+    docForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const resultEl = document.getElementById('docResult');
+        const btn = docForm.querySelector('button[type="submit"]');
+        btn.disabled = true;
+        btn.textContent = 'Envoi en cours...';
+        resultEl.textContent = '';
+
+        try {
+            const res = await fetch('/api/request-document', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action: 'request',
+                    docType: document.getElementById('docType').value,
+                    childName: document.getElementById('docChildName').value,
+                    childLastName: document.getElementById('docChildLastName').value,
+                    parentName: document.getElementById('docParentName').value,
+                    parentEmail: document.getElementById('docEmail').value,
+                    activity: document.getElementById('docActivity').value,
+                    amount: document.getElementById('docAmount').value
+                })
+            });
+            const data = await res.json();
+            if (data.success) {
+                resultEl.style.color = '#4CAF50';
+                resultEl.textContent = 'Demande envoyée ! Vous recevrez le document par email après validation.';
+                docForm.reset();
+            } else {
+                resultEl.style.color = '#F44336';
+                resultEl.textContent = 'Erreur : ' + (data.error || 'Réessayez.');
+            }
+        } catch (err) {
+            resultEl.style.color = '#F44336';
+            resultEl.textContent = 'Erreur de connexion.';
+        }
+        btn.disabled = false;
+        btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Demander le document';
+    });
+}
+
 // --- ADMIN PANEL ---
 function createAdminPanel() {
     const trigger = document.createElement('button');
