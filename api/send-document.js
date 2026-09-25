@@ -200,8 +200,8 @@ module.exports = async (req, res) => {
 
         // Signature + cachet image
         if (signatureImage) {
-            const sigScale = 120 / signatureImage.height;
-            page.drawImage(signatureImage, { x: 300, y: y - 20, width: signatureImage.width * sigScale, height: 120 });
+            const sigScale = 200 / signatureImage.height;
+            page.drawImage(signatureImage, { x: 250, y: y - 60, width: signatureImage.width * sigScale, height: 200 });
         }
 
         // Footer
@@ -215,6 +215,7 @@ module.exports = async (req, res) => {
         // Send email with PDF attachment
         await resend.emails.send({
             from: 'Jump Stage <noreply@jumpstage.be>',
+            reply_to: 'info.jumpasbl@gmail.com',
             to: emailAddr,
             subject: `${docLabel} — ${childName}`,
             html: `
@@ -236,6 +237,7 @@ module.exports = async (req, res) => {
         // Notify admin
         await resend.emails.send({
             from: 'Jump Stage <noreply@jumpstage.be>',
+            reply_to: 'info.jumpasbl@gmail.com',
             to: 'info.jumpasbl@gmail.com',
             subject: `Document envoyé — ${docLabel} — ${childName}`,
             html: `<p>Le document <strong>${docLabel}</strong> (PDF) a été envoyé à <strong>${emailAddr}</strong> pour <strong>${childName}</strong>.</p>`
