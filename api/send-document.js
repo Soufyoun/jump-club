@@ -36,13 +36,42 @@ module.exports = async (req, res) => {
         const gray = rgb(0.4, 0.4, 0.48);
         const lightBg = rgb(0.97, 0.97, 0.98);
 
+        // Load logo and mascot
+        let logoImage, jumpyImage;
+        try {
+            const logoRes = await fetch('https://www.jumpstage.be/assets/logo.png');
+            const logoBytes = await logoRes.arrayBuffer();
+            logoImage = await pdfDoc.embedPng(new Uint8Array(logoBytes));
+        } catch (e) {}
+        try {
+            const jumpyRes = await fetch('https://www.jumpstage.be/assets/jumpy-assis.png');
+            const jumpyBytes = await jumpyRes.arrayBuffer();
+            jumpyImage = await pdfDoc.embedPng(new Uint8Array(jumpyBytes));
+        } catch (e) {}
+
         const w = page.getWidth();
         let y = 780;
 
-        // Header
-        page.drawText('JUMP STAGE ASBL', { x: 50, y, font: fontBold, size: 24, color: orange });
-        y -= 22;
-        page.drawText('Association sans but lucratif — Bruxelles', { x: 50, y, font, size: 10, color: gray });
+        // Logo top left
+        if (logoImage) {
+            const logoScale = 60 / logoImage.height;
+            page.drawImage(logoImage, { x: 50, y: y - 10, width: logoImage.width * logoScale, height: 60 });
+        }
+
+        // Jumpy top right
+        if (jumpyImage) {
+            const jumpyScale = 80 / jumpyImage.height;
+            page.drawImage(jumpyImage, { x: w - 50 - (jumpyImage.width * jumpyScale), y: y - 20, width: jumpyImage.width * jumpyScale, height: 80 });
+        }
+
+        // Header text (centered)
+        const headerText = 'JUMP STAGE ASBL';
+        const headerWidth = fontBold.widthOfTextAtSize(headerText, 22);
+        page.drawText(headerText, { x: (w - headerWidth) / 2, y: y, font: fontBold, size: 22, color: orange });
+        y -= 20;
+        const subText = 'Association sans but lucratif — Bruxelles';
+        const subWidth = font.widthOfTextAtSize(subText, 10);
+        page.drawText(subText, { x: (w - subWidth) / 2, y, font, size: 10, color: gray });
         y -= 10;
         page.drawLine({ start: { x: 50, y }, end: { x: w - 50, y }, thickness: 2, color: orange });
 
