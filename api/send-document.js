@@ -109,12 +109,7 @@ module.exports = async (req, res) => {
             y -= 20;
         });
 
-        // Info box
-        y -= 10;
-        const boxH = infoLines.length * 22 + 20;
-        page.drawRectangle({ x: 50, y: y - boxH + 20, width: w - 100, height: boxH, color: lightBg });
-
-        y -= 5;
+        // Build info lines first
         const dateStartVal = decodeURIComponent(dateStart || '');
         const dateEndVal = decodeURIComponent(dateEnd || '');
         const nbDaysVal = decodeURIComponent(nbDays || '');
@@ -140,6 +135,13 @@ module.exports = async (req, res) => {
                 ['Montant paye :', amountVal + ' EUR']
             );
         }
+
+        // Info box
+        y -= 10;
+        const boxH = infoLines.length * 22 + 20;
+        page.drawRectangle({ x: 50, y: y - boxH + 20, width: w - 100, height: boxH, color: lightBg });
+
+        y -= 5;
 
         infoLines.forEach(([label, value]) => {
             page.drawText(label, { x: 70, y, font: fontBold, size: 12, color: gray });
