@@ -48,6 +48,12 @@ module.exports = async (req, res) => {
             const jumpyBytes = await jumpyRes.arrayBuffer();
             jumpyImage = await pdfDoc.embedPng(new Uint8Array(jumpyBytes));
         } catch (e) {}
+        let signatureImage;
+        try {
+            const sigRes = await fetch('https://www.jumpstage.be/assets/signature-cachet.png');
+            const sigBytes = await sigRes.arrayBuffer();
+            signatureImage = await pdfDoc.embedPng(new Uint8Array(sigBytes));
+        } catch (e) {}
 
         const w = page.getWidth();
         let y = 780;
@@ -187,10 +193,16 @@ module.exports = async (req, res) => {
         // Signature
         y -= 40;
         page.drawText('Fait a Bruxelles, le ' + today, { x: 50, y, font, size: 11, color: gray });
-        y -= 30;
+        y -= 25;
         page.drawText('Soufiane Hamouda', { x: 50, y, font: fontBold, size: 13, color: black });
         y -= 18;
         page.drawText('Administrateur — Jump Brussels ASBL', { x: 50, y, font, size: 11, color: gray });
+
+        // Signature + cachet image
+        if (signatureImage) {
+            const sigScale = 120 / signatureImage.height;
+            page.drawImage(signatureImage, { x: 300, y: y - 20, width: signatureImage.width * sigScale, height: 120 });
+        }
 
         // Footer
         page.drawLine({ start: { x: 50, y: 60 }, end: { x: w - 50, y: 60 }, thickness: 0.5, color: rgb(0.85, 0.85, 0.88) });
