@@ -459,31 +459,7 @@ if (inscriptionForm) {
         const saved = await saveInscription(data);
         console.log('Inscription saved:', saved);
 
-        // Send confirmation email
-        try {
-            await fetch('/api/send-confirmation', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    parentEmail: data.parentEmail,
-                    parentName: data.parentName,
-                    parentLastName: data.parentLastName,
-                    parentPhone: data.parentPhone,
-                    childName: data.childName,
-                    childLastName: data.childLastName,
-                    childAge: data.childAge,
-                    activity: data.activity,
-                    period: data.period,
-                    paymentMethod: data.paymentMethod,
-                    swimGroup: data.swimGroup || '',
-                    timeSlot: data.timeSlot || ''
-                })
-            });
-        } catch (err) {
-            console.error('Email error:', err);
-        }
-
-        // Redirect to Mollie for 30€ deposit
+        // Redirect to Mollie for 30€ deposit (email sent after payment via webhook)
         try {
             const payRes = await fetch('/api/create-payment', {
                 method: 'POST',
@@ -710,21 +686,13 @@ async function updateAdminPanel() {
     if (!statsEl || !tableWrapper) return;
 
     // Stats globales en haut
-    const totalAll = inscriptions.length;
     const paidAll = inscriptions.filter(i => i.payment_status === 'paid').length;
+    const pendingAll = inscriptions.filter(i => i.payment_status !== 'paid').length;
     const revenueAll = inscriptions.filter(i => i.payment_status === 'paid').reduce((sum, i) => sum + (i.price || 0), 0);
 
-    const tabLabels = {
-        'natation-ixelles': '\uD83C\uDFCA Natation Ixelles',
-        'natation-molenbeek': '\uD83C\uDFCA Natation Molenbeek',
-        'stage-molenbeek': '\uD83C\uDFAF Stages Molenbeek',
-        'stage-uccle': '\uD83C\uDFAF Stages Uccle',
-        'all': '\uD83D\uDCCB Tout'
-    };
-
     statsEl.innerHTML = `
-        <div class="admin-stat"><span class="num">${totalAll}</span><span class="label">Total inscrits</span></div>
-        <div class="admin-stat"><span class="num" style="color:#4CAF50">${paidAll}</span><span class="label">Pay\u00E9s</span></div>
+        <div class="admin-stat"><span class="num" style="color:#4CAF50">${paidAll}</span><span class="label">Inscrits (pay\u00E9s)</span></div>
+        <div class="admin-stat"><span class="num" style="color:#FF9800">${pendingAll}</span><span class="label">En attente paiement</span></div>
         <div class="admin-stat"><span class="num">${revenueAll}\u20AC</span><span class="label">Encaiss\u00E9</span></div>
     `;
 
