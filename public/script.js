@@ -420,12 +420,11 @@ function updatePaymentSection() {
         paymentSection.innerHTML = `
             <h4>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-                Paiement
+                Acompte à payer
             </h4>
-            <div class="price-display"><span id="priceAmount"></span> <small id="priceLabel">/ saison</small></div>
+            <div class="price-display"><span id="priceAmount">30€</span></div>
             <div class="payment-details-box" style="display:block;">
-                <p style="margin-bottom:8px;"><strong>Acompte obligatoire :</strong> 30€ à payer en ligne maintenant</p>
-                <p style="color:var(--gray-600);font-size:0.85rem;">Restant à payer : <strong>${restant}€</strong> — le montant restant vous sera communiqué par email après validation de votre inscription.</p>
+                <p style="color:var(--gray-600);font-size:0.85rem;">Prix total : ${price}€ — Restant après acompte : <strong>${restant}€</strong> (communiqué par email)</p>
             </div>
         `;
         // Insert before the submit button
@@ -433,8 +432,6 @@ function updatePaymentSection() {
         inscriptionForm.insertBefore(paymentSection, submitBtn);
     }
 
-    document.getElementById('priceAmount').textContent = price + '\u20AC';
-    document.getElementById('priceLabel').textContent = activity.startsWith('natation') ? '/ saison complete' : '/ semaine de stage';
     paymentSection.classList.add('active');
 }
 
