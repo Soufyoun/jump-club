@@ -416,22 +416,16 @@ function updatePaymentSection() {
         paymentSection = document.createElement('div');
         paymentSection.id = 'paymentSection';
         paymentSection.className = 'payment-section';
+        const restant = price - 30;
         paymentSection.innerHTML = `
             <h4>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
                 Paiement
             </h4>
             <div class="price-display"><span id="priceAmount"></span> <small id="priceLabel">/ saison</small></div>
-            <div class="payment-methods">
-                <button type="button" class="payment-method" data-method="online" onclick="selectPayment(this)">
-                    💳 Payer en ligne
-                </button>
-                <button type="button" class="payment-method" data-method="cash" onclick="selectPayment(this)">
-                    💶 Payer en cash
-                </button>
-            </div>
-            <div id="paymentDetails" class="payment-details-box" style="display:none;">
-                <p id="paymentInfo"></p>
+            <div class="payment-details-box" style="display:block;">
+                <p style="margin-bottom:8px;"><strong>Acompte obligatoire :</strong> 30€ à payer en ligne maintenant</p>
+                <p style="color:var(--gray-600);font-size:0.85rem;">Restant à payer : <strong>${restant}€</strong> — le montant restant vous sera communiqué par email après validation de votre inscription.</p>
             </div>
         `;
         // Insert before the submit button
@@ -447,25 +441,6 @@ function updatePaymentSection() {
 if (activitySelect) activitySelect.addEventListener('change', updatePaymentSection);
 if (periodSelect) periodSelect.addEventListener('change', updatePaymentSection);
 
-window.selectPayment = function(btn) {
-    document.querySelectorAll('.payment-method').forEach(b => b.classList.remove('selected'));
-    btn.classList.add('selected');
-
-    const method = btn.dataset.method;
-    const details = document.getElementById('paymentDetails');
-    const info = document.getElementById('paymentInfo');
-
-    details.style.display = 'block';
-
-    switch(method) {
-        case 'online':
-            info.innerHTML = 'Vous serez redirigé vers notre page de paiement sécurisée après validation du formulaire.';
-            break;
-        case 'cash':
-            info.innerHTML = '<strong>⚠️ Important :</strong> N\'oubliez pas de prendre rendez-vous par email à <a href="mailto:info.jumpasbl@gmail.com" style="color:var(--orange);font-weight:600">info.jumpasbl@gmail.com</a> car l\'inscription n\'est pas validée tant qu\'un administrateur ne l\'a pas confirmée.';
-            break;
-    }
-};
 
 if (inscriptionForm) {
     inscriptionForm.addEventListener('submit', async (e) => {
@@ -477,9 +452,7 @@ if (inscriptionForm) {
         const formData = new FormData(inscriptionForm);
         const data = Object.fromEntries(formData);
 
-        // Get selected payment method
-        const selectedPayment = document.querySelector('.payment-method.selected');
-        data.paymentMethod = selectedPayment ? selectedPayment.dataset.method : 'sur place';
+        data.paymentMethod = 'acompte-30';
         data.price = getPrice(data.activity, data.period);
 
         // Save to Supabase
@@ -510,26 +483,24 @@ if (inscriptionForm) {
             console.error('Email error:', err);
         }
 
-        // If online payment selected, redirect to Mollie
-        if (data.paymentMethod === 'online') {
-            try {
-                const payRes = await fetch('/api/create-payment', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        amount: data.price,
-                        description: `Jump Club - ${data.childName} - ${data.activity}`,
-                        inscriptionId: saved.id
-                    })
-                });
-                const payData = await payRes.json();
-                if (payData.checkoutUrl) {
-                    window.location.href = payData.checkoutUrl;
-                    return;
-                }
-            } catch (err) {
-                console.error('Payment error:', err);
+        // Redirect to Mollie for 30€ deposit
+        try {
+            const payRes = await fetch('/api/create-payment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    amount: 30,
+                    description: `Acompte Jump Stage - ${data.childName} ${data.childLastName || ''} - ${data.activity}`,
+                    inscriptionId: saved.id
+                })
+            });
+            const payData = await payRes.json();
+            if (payData.checkoutUrl) {
+                window.location.href = payData.checkoutUrl;
+                return;
             }
+        } catch (err) {
+            console.error('Payment error:', err);
         }
 
         // If virement or sur place, show success

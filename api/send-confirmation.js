@@ -30,7 +30,7 @@ module.exports = async (req, res) => {
         activityLabels['natation-molenbeek-2x'] = 'Natation — Molenbeek (2x/semaine)';
 
         const actLabel = activityLabels[activity] || activity;
-        const paiement = paymentMethod === 'online' ? 'Paiement en ligne' : 'Paiement en cash';
+        const paiement = paymentMethod === 'acompte-30' ? 'Acompte de 30€ payé en ligne' : (paymentMethod === 'online' ? 'Paiement en ligne' : 'Paiement en cash');
 
         const groupLabels = {
             'blanc': 'Groupe Blanc', 'jaune': 'Groupe Jaune', 'rouge': 'Groupe Rouge', 'vert': 'Groupe Vert',
@@ -60,7 +60,7 @@ module.exports = async (req, res) => {
                         ${slotLabel ? `<p><strong>Créneau :</strong> ${slotLabel}</p>` : ''}
                         <p><strong>Paiement :</strong> ${paiement}</p>
                     </div>
-                    ${paymentMethod === 'cash' ? '<p style="background:#FFF3E0;padding:15px;border-radius:8px;border-left:4px solid #FF6B35;"><strong>⚠️ Rappel :</strong> Votre inscription ne sera validée qu\'après confirmation par un administrateur. Prenez rendez-vous par email à <a href="mailto:info.jumpasbl@gmail.com" style="color:#FF6B35;">info.jumpasbl@gmail.com</a></p>' : ''}
+                    ${paymentMethod === 'acompte-30' ? '<p style="background:#E8F5E9;padding:15px;border-radius:8px;border-left:4px solid #4CAF50;"><strong>✅ Acompte de 30€ payé.</strong> Le montant restant vous sera communiqué par email. Pour toute question : <a href="mailto:info.jumpasbl@gmail.com" style="color:#FF6B35;">info.jumpasbl@gmail.com</a></p>' : ''}
                     <p>À très bientôt chez Jump Stage !</p>
                     <p style="color:#999;font-size:12px;margin-top:30px;">Jump Stage ASBL — Bruxelles<br><a href="https://www.jumpstage.be" style="color:#FF6B35;">www.jumpstage.be</a></p>
                 </div>
