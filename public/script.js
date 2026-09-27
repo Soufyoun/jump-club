@@ -420,11 +420,11 @@ function updatePaymentSection() {
         paymentSection.innerHTML = `
             <h4>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-                Acompte à payer
+                Acompte à payer maintenant
             </h4>
             <div class="price-display"><span id="priceAmount">30€</span></div>
             <div class="payment-details-box" style="display:block;">
-                <p style="color:var(--gray-600);font-size:0.85rem;">Prix total : ${price}€ — Restant après acompte : <strong>${restant}€</strong> (communiqué par email)</p>
+                <p style="font-size:0.9rem;">Le restant de <strong>${restant}€</strong> sera à payer ultérieurement. Les modalités vous seront communiquées par email après validation de votre inscription.</p>
             </div>
         `;
         // Insert before the submit button
