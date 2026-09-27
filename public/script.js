@@ -718,11 +718,14 @@ async function updateAdminPanel() {
         return new Date(b.created_at) - new Date(a.created_at);
     });
 
+    // Only show paid inscriptions
+    filtered = filtered.filter(i => i.payment_status === 'paid');
+
     if (filtered.length === 0) {
         tableWrapper.innerHTML = `
             <div class="no-data">
                 <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
-                <p>Aucune inscription.</p>
+                <p>Aucune inscription payée.</p>
             </div>
         `;
         return;
@@ -886,6 +889,9 @@ window.exportCSV = async function() {
         if (!subGroups[gKey]) subGroups[gKey] = [];
         subGroups[gKey].push(i);
     });
+
+    // Only export paid inscriptions
+    filtered = filtered.filter(i => i.payment_status === 'paid');
 
     // Sort by group name for clean Excel grouping
     filtered.sort((a, b) => (a.group_name || '').localeCompare(b.group_name || ''));
