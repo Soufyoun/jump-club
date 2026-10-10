@@ -273,11 +273,17 @@ if (_actSelect && _perSelect) {
             }
         }
         if (isNatation) {
-            const opt = document.createElement('option');
-            opt.value = 'saison-2026-2027';
-            opt.textContent = 'Année 2026-2027';
-            opt.selected = true;
-            _perSelect.appendChild(opt);
+            const saisons = [
+                { value: 'saison-2026-2027', text: 'Année 2026-2027 (sept. 2026 — juin 2027)', selected: true },
+                { value: 'saison-2025-2026', text: 'Année 2025-2026 (sept. 2025 — juin 2026)' }
+            ];
+            saisons.forEach(s => {
+                const opt = document.createElement('option');
+                opt.value = s.value;
+                opt.textContent = s.text;
+                if (s.selected) opt.selected = true;
+                _perSelect.appendChild(opt);
+            });
         } else {
             const defOpt = document.createElement('option');
             defOpt.value = '';

@@ -15,7 +15,9 @@ module.exports = async (req, res) => {
         const childName = decodeURIComponent(child);
         const parentName = decodeURIComponent(parent || '');
         const activityName = decodeURIComponent(activity || '-');
-        const periodName = decodeURIComponent(period || '-');
+        let periodName = decodeURIComponent(period || '-');
+        if (periodName === 'saison-2026-2027') periodName = 'Année scolaire 2026-2027 (septembre 2026 — juin 2027)';
+        if (periodName === 'saison-2025-2026') periodName = 'Année scolaire 2025-2026 (septembre 2025 — juin 2026)';
         const amountVal = decodeURIComponent(amount || '0');
         const emailAddr = decodeURIComponent(email);
 
