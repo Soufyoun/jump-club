@@ -292,8 +292,9 @@ if (_actSelect && _perSelect) {
             defOpt.selected = true;
             _perSelect.appendChild(defOpt);
 
+            const isBoostMolenbeek = val === 'stage-boost-molenbeek';
             const periods = [
-                { value: 'toussaint-s1', text: 'Toussaint — Semaine 1' },
+                { value: 'toussaint-s1', text: isBoostMolenbeek ? 'Toussaint — Semaine 1 (COMPLET)' : 'Toussaint — Semaine 1', disabled: isBoostMolenbeek },
                 { value: 'toussaint-s2', text: 'Toussaint — Semaine 2' },
                 { value: 'toussaint-2sem', text: 'Toussaint — 2 semaines' }
             ];
@@ -301,6 +302,7 @@ if (_actSelect && _perSelect) {
                 const opt = document.createElement('option');
                 opt.value = p.value;
                 opt.textContent = p.text;
+                if (p.disabled) opt.disabled = true;
                 _perSelect.appendChild(opt);
             });
         }
