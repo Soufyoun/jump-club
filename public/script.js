@@ -511,6 +511,47 @@ document.getElementById('successModal').addEventListener('click', (e) => {
     if (e.target === e.currentTarget) closeModal();
 });
 
+// --- MUTUELLE FORM ---
+const mutForm = document.getElementById('mutuelleForm');
+if (mutForm) {
+    mutForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const resultEl = document.getElementById('mutResult');
+        const btn = mutForm.querySelector('button[type="submit"]');
+        btn.disabled = true;
+        btn.textContent = 'Envoi en cours...';
+        resultEl.textContent = '';
+        try {
+            const res = await fetch('/api/mutuelle-form', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    mutuelle: document.getElementById('mutuelleSelect').value,
+                    childName: document.getElementById('mutChildName').value,
+                    parentEmail: document.getElementById('mutEmail').value,
+                    activity: document.getElementById('mutActivity').value,
+                    amount: document.getElementById('mutAmount').value,
+                    startDate: document.getElementById('mutStartDate').value
+                })
+            });
+            const data = await res.json();
+            if (data.success) {
+                resultEl.style.color = '#4CAF50';
+                resultEl.textContent = 'Formulaire envoyé par email ! Vérifiez votre boîte de réception.';
+                mutForm.reset();
+            } else {
+                resultEl.style.color = '#F44336';
+                resultEl.textContent = 'Erreur : ' + (data.error || 'Réessayez.');
+            }
+        } catch (err) {
+            resultEl.style.color = '#F44336';
+            resultEl.textContent = 'Erreur de connexion.';
+        }
+        btn.disabled = false;
+        btn.textContent = 'Recevoir le formulaire pré-rempli';
+    });
+}
+
 // --- DOCUMENT REQUEST ---
 const docTypeSelect = document.getElementById('docType');
 if (docTypeSelect) {

@@ -762,6 +762,51 @@
                         </a>
                     </div>
                 </div>
+                <div class="contact-cta" style="margin-bottom:24px;">
+                    <h4 style="margin-bottom:12px;">Remboursement mutuelle</h4>
+                    <p class="contact-cta-text">Recevez le formulaire de votre mutuelle pré-rempli par email.</p>
+                    <form id="mutuelleForm" style="text-align:left;">
+                        <div class="form-group">
+                            <label>Votre mutuelle</label>
+                            <select id="mutuelleSelect" required>
+                                <option value="" disabled selected>Choisir votre mutuelle</option>
+                                <option value="partenamut">Partenamut</option>
+                                <option value="mc" disabled>Mutualité Chrétienne (bientôt)</option>
+                                <option value="solidaris" disabled>Solidaris (bientôt)</option>
+                                <option value="helan" disabled>Helan (bientôt)</option>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Nom de l'enfant</label>
+                                <input type="text" id="mutChildName" required placeholder="Nom et prénom">
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" id="mutEmail" required placeholder="votre@email.com">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Activité</label>
+                                <input type="text" id="mutActivity" placeholder="Ex: Natation, Stage Toussaint...">
+                            </div>
+                            <div class="form-group">
+                                <label>Montant payé (€)</label>
+                                <input type="number" id="mutAmount" placeholder="Ex: 210">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Date de début</label>
+                            <input type="date" id="mutStartDate">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-lg" style="width:100%;">
+                            Recevoir le formulaire pré-rempli
+                        </button>
+                        <p id="mutResult" style="text-align:center;margin-top:12px;font-size:0.85rem;"></p>
+                    </form>
+                </div>
+
                 <div class="contact-cta">
                     <h4 style="margin-bottom:8px;">Demander une attestation</h4>
                     <p class="contact-cta-text">Attestation d'inscription, fiscale ou mutuelle.</p>
