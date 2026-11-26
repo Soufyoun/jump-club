@@ -38,37 +38,38 @@ module.exports = async (req, res) => {
 
         const black = rgb(0, 0, 0);
 
-        // Fill in the club section
+        // "La direction du club sportif"
+        page.drawText('Jump Brussels ASBL', { x: 230, y: 468, font: fontBold, size: 10, color: black });
+
+        // "affilié à la Fédération/Ligue"
+        page.drawText('ADEPS - Fédération Wallonie-Bruxelles', { x: 230, y: 451, font, size: 9, color: black });
+
         // "certifie que (nom et prénom)" - child name
-        page.drawText(childName, { x: 265, y: 390, font: fontBold, size: 11, color: black });
+        page.drawText(childName, { x: 230, y: 434, font: fontBold, size: 11, color: black });
 
         // "a contracté ou a renouvelé un abonnement / est affiliée à partir du"
         if (startDate) {
             const parts = startDate.split('-');
             if (parts.length === 3) {
-                page.drawText(parts[2], { x: 395, y: 368, font, size: 10, color: black });
-                page.drawText(parts[1], { x: 420, y: 368, font, size: 10, color: black });
-                page.drawText(parts[0], { x: 445, y: 368, font, size: 10, color: black });
+                page.drawText(parts[2], { x: 410, y: 415, font, size: 10, color: black });
+                page.drawText(parts[1], { x: 440, y: 415, font, size: 10, color: black });
+                page.drawText(parts[0], { x: 470, y: 415, font, size: 10, color: black });
             }
         }
 
         // Sport pratiqué
         const sportLabel = activity || 'Natation / Stages multi-activités';
-        page.drawText(sportLabel, { x: 190, y: 345, font, size: 10, color: black });
+        page.drawText(sportLabel, { x: 190, y: 396, font, size: 10, color: black });
 
         // Montant payé
         if (amount) {
-            page.drawText(amount.toString(), { x: 165, y: 322, font: fontBold, size: 11, color: black });
+            page.drawText(amount.toString(), { x: 165, y: 376, font: fontBold, size: 11, color: black });
         }
 
-        // "La direction du club sportif affilié à la Fédération/Ligue"
-        page.drawText('Jump Brussels ASBL', { x: 290, y: 435, font: fontBold, size: 10, color: black });
-        page.drawText('ADEPS - Fédération Wallonie-Bruxelles', { x: 290, y: 418, font, size: 9, color: black });
-
-        // Cachet + signature
+        // Cachet du club sportif (left box)
         if (stampImage) {
-            const scale = 100 / stampImage.height;
-            page.drawImage(stampImage, { x: 70, y: 240, width: stampImage.width * scale, height: 100 });
+            const scale = 80 / stampImage.height;
+            page.drawImage(stampImage, { x: 100, y: 290, width: stampImage.width * scale, height: 80 });
         }
 
         const filledPdf = await pdfDoc.save();
