@@ -63,7 +63,7 @@ module.exports = async (req, res) => {
 
         // Montant payé
         if (amount) {
-            page.drawText(amount.toString(), { x: 165, y: 420, font: fontBold, size: 11, color: black });
+            page.drawText(amount.toString(), { x: 165, y: 405, font: fontBold, size: 11, color: black });
         }
 
         // Cachet du club sportif (left box)
