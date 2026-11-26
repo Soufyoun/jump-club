@@ -38,44 +38,44 @@ module.exports = async (req, res) => {
 
         const black = rgb(0, 0, 0);
 
-        // "La direction du club sportif"
-        page.drawText('Jump Brussels ASBL', { x: 230, y: 517, font: fontBold, size: 10, color: black });
+        // "La direction du club sportif" → après la flèche
+        page.drawText('Jump Brussels ASBL', { x: 240, y: 530, font: fontBold, size: 10, color: black });
 
-        // "affilié à la Fédération/Ligue"
-        page.drawText('ADEPS - Fédération Wallonie-Bruxelles', { x: 230, y: 500, font, size: 9, color: black });
+        // "affilié à la Fédération/Ligue" → après la flèche
+        page.drawText('ADEPS - Fédération Wallonie-Bruxelles', { x: 240, y: 510, font, size: 9, color: black });
 
-        // "certifie que (nom et prénom)" - child name
-        page.drawText(childName, { x: 230, y: 483, font: fontBold, size: 11, color: black });
+        // "certifie que (nom et prénom)" → après la flèche
+        page.drawText(childName, { x: 240, y: 490, font: fontBold, size: 11, color: black });
 
-        // "a contracté ou a renouvelé un abonnement / est affiliée à partir du"
+        // "a contracté... à partir du" → dans les petites cases
         if (startDate) {
             const parts = startDate.split('-');
             if (parts.length === 3) {
-                page.drawText(parts[2], { x: 410, y: 466, font, size: 10, color: black });
-                page.drawText(parts[1], { x: 440, y: 466, font, size: 10, color: black });
-                page.drawText(parts[0], { x: 470, y: 466, font, size: 10, color: black });
+                page.drawText(parts[2], { x: 418, y: 470, font, size: 9, color: black });
+                page.drawText(parts[1], { x: 455, y: 470, font, size: 9, color: black });
+                page.drawText(parts[0], { x: 492, y: 470, font, size: 9, color: black });
             }
         }
 
-        // Sport pratiqué
+        // "Sport pratiqué :" → après la flèche
         const sportLabel = activity || 'Natation / Stages multi-activités';
-        page.drawText(sportLabel, { x: 190, y: 446, font, size: 10, color: black });
+        page.drawText(sportLabel, { x: 170, y: 450, font, size: 10, color: black });
 
-        // Montant payé
+        // "Montant payé" → dans les cases
         if (amount) {
-            page.drawText(amount.toString(), { x: 165, y: 405, font: fontBold, size: 11, color: black });
+            page.drawText(amount.toString(), { x: 185, y: 395, font: fontBold, size: 11, color: black });
         }
 
-        // Cachet du club sportif (left box)
+        // Cachet du club sportif (case gauche)
         if (stampImage) {
-            const scale = 100 / stampImage.height;
-            page.drawImage(stampImage, { x: 85, y: 280, width: stampImage.width * scale, height: 100 });
+            const scale = 90 / stampImage.height;
+            page.drawImage(stampImage, { x: 100, y: 270, width: stampImage.width * scale, height: 90 });
         }
 
-        // Signature dans la case droite
+        // Signature du responsable (case droite)
         if (stampImage) {
-            const sigScale = 70 / stampImage.height;
-            page.drawImage(stampImage, { x: 400, y: 295, width: stampImage.width * sigScale, height: 70 });
+            const sigScale = 65 / stampImage.height;
+            page.drawImage(stampImage, { x: 390, y: 285, width: stampImage.width * sigScale, height: 65 });
         }
 
         const filledPdf = await pdfDoc.save();
