@@ -72,16 +72,14 @@ module.exports = async (req, res) => {
             page.drawText(amount.toString(), { x: 145, y: 395, font: fontBold, size: 11, color: black });
         }
 
-        // Cachet du club sportif (case gauche) - remplir la case
+        // Cachet du club sportif (case gauche) - MAX
         if (cachetImage) {
-            const scale = 130 / cachetImage.height;
-            page.drawImage(cachetImage, { x: 80, y: 250, width: cachetImage.width * scale, height: 130 });
+            page.drawImage(cachetImage, { x: 65, y: 230, width: 200, height: 160 });
         }
 
-        // Signature du responsable (case droite) - remplir la case
+        // Signature du responsable (case droite) - MAX
         if (signImage) {
-            const sigScale = 100 / signImage.height;
-            page.drawImage(signImage, { x: 360, y: 270, width: signImage.width * sigScale, height: 100 });
+            page.drawImage(signImage, { x: 340, y: 250, width: 200, height: 130 });
         }
 
         const filledPdf = await pdfDoc.save();
