@@ -58,66 +58,66 @@ async function fillSolidaris({ pdfDoc, childName, activity, startDate, endDate, 
     const { cachetImage, signImage } = await loadImages(pdfDoc);
     const black = rgb(0, 0, 0);
 
-    // "Je soussigné.e :" → nom du responsable
-    page.drawText('Soufiane Hamouda', { x: 130, y: 330, font: fontBold, size: 10, color: black });
+    // "Je soussigné.e :"
+    page.drawText('Soufiane Hamouda', { x: 145, y: 365, font: fontBold, size: 10, color: black });
 
     // "Nom :" (association)
-    page.drawText('JUMP ASBL', { x: 75, y: 308, font: fontBold, size: 10, color: black });
+    page.drawText('JUMP ASBL', { x: 95, y: 325, font: fontBold, size: 10, color: black });
 
     // "Adresse :"
-    page.drawText('Rue de Birmingham 12', { x: 90, y: 286, font, size: 9, color: black });
+    page.drawText('Rue de Birmingham 12', { x: 115, y: 303, font, size: 9, color: black });
 
     // "Code postal et localité :"
-    page.drawText('1080 Molenbeek-Saint-Jean', { x: 155, y: 264, font, size: 9, color: black });
+    page.drawText('1080 Molenbeek-Saint-Jean', { x: 185, y: 283, font, size: 9, color: black });
 
     // "N° de téléphone :"
-    page.drawText('+32 490 21 44 50', { x: 130, y: 242, font, size: 9, color: black });
+    page.drawText('+32 490 21 44 50', { x: 150, y: 263, font, size: 9, color: black });
 
     // "Nom et prénom du/de la bénéficiaire du service :"
-    page.drawText(childName, { x: 280, y: 220, font: fontBold, size: 10, color: black });
+    page.drawText(childName, { x: 295, y: 243, font: fontBold, size: 10, color: black });
 
     // "Certifie sur l'honneur que la somme de ... €"
     if (amount) {
-        page.drawText(amount.toString(), { x: 270, y: 198, font: fontBold, size: 11, color: black });
+        page.drawText(amount.toString(), { x: 265, y: 223, font: fontBold, size: 11, color: black });
     }
 
     // "pour la période du .../.../..... au .../.../...."
     if (startDate) {
         const p = startDate.split('-');
         if (p.length === 3) {
-            page.drawText(p[2], { x: 138, y: 176, font, size: 9, color: black });
-            page.drawText(p[1], { x: 165, y: 176, font, size: 9, color: black });
-            page.drawText(p[0], { x: 192, y: 176, font, size: 9, color: black });
+            page.drawText(p[2], { x: 145, y: 203, font, size: 9, color: black });
+            page.drawText(p[1], { x: 172, y: 203, font, size: 9, color: black });
+            page.drawText(p[0], { x: 197, y: 203, font, size: 9, color: black });
         }
     }
     if (endDate) {
         const p = endDate.split('-');
         if (p.length === 3) {
-            page.drawText(p[2], { x: 275, y: 176, font, size: 9, color: black });
-            page.drawText(p[1], { x: 302, y: 176, font, size: 9, color: black });
-            page.drawText(p[0], { x: 329, y: 176, font, size: 9, color: black });
+            page.drawText(p[2], { x: 285, y: 203, font, size: 9, color: black });
+            page.drawText(p[1], { x: 312, y: 203, font, size: 9, color: black });
+            page.drawText(p[0], { x: 338, y: 203, font, size: 9, color: black });
         }
     }
 
     // "pour la pratique du sport suivant :"
     const sportLabel = activity || 'Natation / Stages multi-activités';
-    page.drawText(sportLabel, { x: 215, y: 154, font, size: 10, color: black });
+    page.drawText(sportLabel, { x: 225, y: 183, font, size: 10, color: black });
 
     // "Date :" (date du jour)
     const today = new Date();
     const dd = today.getDate().toString().padStart(2, '0');
     const mm = (today.getMonth() + 1).toString().padStart(2, '0');
     const yyyy = today.getFullYear();
-    page.drawText(dd, { x: 80, y: 132, font, size: 9, color: black });
-    page.drawText(mm, { x: 107, y: 132, font, size: 9, color: black });
-    page.drawText(yyyy.toString(), { x: 134, y: 132, font, size: 9, color: black });
+    page.drawText(dd, { x: 95, y: 163, font, size: 9, color: black });
+    page.drawText(mm, { x: 122, y: 163, font, size: 9, color: black });
+    page.drawText(yyyy.toString(), { x: 148, y: 163, font, size: 9, color: black });
 
-    // "Signature et cachet :" (en bas à droite)
+    // "Signature et cachet :" (boîte en bas à droite)
     if (cachetImage) {
-        page.drawImage(cachetImage, { x: 350, y: 50, width: 170, height: 130 });
+        page.drawImage(cachetImage, { x: 335, y: 105, width: 150, height: 45 });
     }
     if (signImage) {
-        page.drawImage(signImage, { x: 370, y: 55, width: 140, height: 100 });
+        page.drawImage(signImage, { x: 345, y: 108, width: 130, height: 35 });
     }
 }
 
