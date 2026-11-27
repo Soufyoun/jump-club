@@ -44,7 +44,7 @@ module.exports = async (req, res) => {
         const black = rgb(0, 0, 0);
 
         // "La direction du club sportif" → après la flèche
-        page.drawText('Jump Brussels ASBL', { x: 240, y: 530, font: fontBold, size: 10, color: black });
+        page.drawText('JUMP ASBL', { x: 240, y: 530, font: fontBold, size: 10, color: black });
 
         // "affilié à la Fédération/Ligue" → après la flèche
         page.drawText('FFBN - Fédération Francophone Belge de Natation', { x: 240, y: 510, font, size: 9, color: black });
