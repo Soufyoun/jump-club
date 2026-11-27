@@ -527,7 +527,7 @@ if (mutForm) {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     mutuelle: document.getElementById('mutuelleSelect').value,
-                    childName: document.getElementById('mutChildName').value,
+                    childName: (document.getElementById('mutChildLastName').value + ' ' + document.getElementById('mutChildName').value).trim(),
                     parentEmail: document.getElementById('mutEmail').value,
                     activity: document.getElementById('mutActivity').value,
                     amount: document.getElementById('mutAmount').value,
