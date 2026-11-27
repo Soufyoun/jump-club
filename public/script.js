@@ -516,7 +516,7 @@ const mutSelEl = document.getElementById('mutuelleSelect');
 if (mutSelEl) {
     mutSelEl.addEventListener('change', () => {
         const endGroup = document.getElementById('mutEndDateGroup');
-        if (endGroup) endGroup.style.display = mutSelEl.value === 'solidaris' ? '' : 'none';
+        if (endGroup) endGroup.style.display = (mutSelEl.value === 'solidaris' || mutSelEl.value === 'mc') ? '' : 'none';
     });
 }
 const mutForm = document.getElementById('mutuelleForm');

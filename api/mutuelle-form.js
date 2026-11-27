@@ -121,6 +121,68 @@ async function fillSolidaris({ pdfDoc, childName, activity, startDate, endDate, 
     }
 }
 
+async function fillMC({ pdfDoc, childName, activity, startDate, endDate, amount }) {
+    const page = pdfDoc.getPages()[0];
+    const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+    const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+    const { cachetImage, signImage } = await loadImages(pdfDoc);
+    const black = rgb(0, 0, 0);
+
+    // "Je soussigné(e)"
+    page.drawText('Soufiane Hamouda', { x: 148, y: 398, font: fontBold, size: 10, color: black });
+
+    // "responsable de l'organisation / l'établissement"
+    page.drawText('JUMP ASBL', { x: 268, y: 378, font: fontBold, size: 10, color: black });
+
+    // "certifie que l'enfant"
+    page.drawText(childName, { x: 158, y: 355, font: fontBold, size: 10, color: black });
+
+    // "du .../.../..... au .../.../...."
+    if (startDate) {
+        const p = startDate.split('-');
+        if (p.length === 3) {
+            page.drawText(p[2], { x: 60, y: 302, font, size: 9, color: black });
+            page.drawText(p[1], { x: 90, y: 302, font, size: 9, color: black });
+            page.drawText(p[0], { x: 115, y: 302, font, size: 9, color: black });
+        }
+    }
+    if (endDate) {
+        const p = endDate.split('-');
+        if (p.length === 3) {
+            page.drawText(p[2], { x: 215, y: 302, font, size: 9, color: black });
+            page.drawText(p[1], { x: 245, y: 302, font, size: 9, color: black });
+            page.drawText(p[0], { x: 270, y: 302, font, size: 9, color: black });
+        }
+    }
+
+    // "et a payé la somme de ... €"
+    if (amount) {
+        page.drawText(amount.toString(), { x: 162, y: 282, font: fontBold, size: 11, color: black });
+    }
+
+    // "Lieu:"
+    page.drawText('Bruxelles', { x: 72, y: 255, font, size: 10, color: black });
+
+    // "Date :" (date du jour)
+    const today = new Date();
+    const dd = today.getDate().toString().padStart(2, '0');
+    const mm = (today.getMonth() + 1).toString().padStart(2, '0');
+    const yyyy = today.getFullYear();
+    page.drawText(dd, { x: 82, y: 222, font, size: 9, color: black });
+    page.drawText(mm, { x: 108, y: 222, font, size: 9, color: black });
+    page.drawText(yyyy.toString(), { x: 132, y: 222, font, size: 9, color: black });
+
+    // "Signature :" (à droite de Date)
+    if (signImage) {
+        page.drawImage(signImage, { x: 370, y: 200, width: 170, height: 40 });
+    }
+
+    // "Cachet du responsable" (grande boîte en bas)
+    if (cachetImage) {
+        page.drawImage(cachetImage, { x: 50, y: 145, width: 200, height: 60 });
+    }
+}
+
 module.exports = async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -135,14 +197,17 @@ module.exports = async (req, res) => {
             return res.status(400).json({ error: 'Champs manquants' });
         }
 
-        const supported = ['partenamut', 'solidaris'];
+        const supported = ['partenamut', 'solidaris', 'mc'];
         if (!supported.includes(mutuelle)) {
             return res.status(400).json({ error: 'Mutuelle non supportée pour le moment' });
         }
 
-        const pdfUrl = mutuelle === 'partenamut'
-            ? 'https://www.jumpstage.be/assets/partenamut-form.pdf'
-            : 'https://www.jumpstage.be/assets/solidaris-form.pdf';
+        const pdfUrls = {
+            partenamut: 'https://www.jumpstage.be/assets/partenamut-form.pdf',
+            solidaris: 'https://www.jumpstage.be/assets/solidaris-form.pdf',
+            mc: 'https://www.jumpstage.be/assets/mc-form.pdf'
+        };
+        const pdfUrl = pdfUrls[mutuelle];
 
         const pdfRes = await fetch(pdfUrl);
         const pdfBytes = await pdfRes.arrayBuffer();
@@ -150,14 +215,17 @@ module.exports = async (req, res) => {
 
         if (mutuelle === 'partenamut') {
             await fillPartenamut({ pdfDoc, childName, activity, startDate, amount });
-        } else {
+        } else if (mutuelle === 'solidaris') {
             await fillSolidaris({ pdfDoc, childName, activity, startDate, endDate, amount });
+        } else if (mutuelle === 'mc') {
+            await fillMC({ pdfDoc, childName, activity, startDate, endDate, amount });
         }
 
         const filledPdf = await pdfDoc.save();
         const pdfBase64 = Buffer.from(filledPdf).toString('base64');
 
-        const mutLabel = mutuelle === 'partenamut' ? 'Partenamut' : 'Solidaris';
+        const mutLabels = { partenamut: 'Partenamut', solidaris: 'Solidaris', mc: 'Mutualité Chrétienne' };
+        const mutLabel = mutLabels[mutuelle];
         const filename = `${mutLabel}_${childName.replace(/\s/g, '_')}.pdf`;
 
         const resend = new Resend(process.env.RESEND_API_KEY);
@@ -174,7 +242,7 @@ module.exports = async (req, res) => {
                     <p><strong>Ce qu'il vous reste à faire :</strong></p>
                     <ul>
                         <li>Compléter vos coordonnées (partie haute du formulaire)</li>
-                        <li>Coller la vignette de l'enfant${mutuelle === 'solidaris' ? ' (en bas du formulaire)' : ''}</li>
+                        <li>Coller la vignette de l'enfant</li>
                         <li>Envoyer le document à votre mutuelle (en ligne, en agence ou par courrier)</li>
                     </ul>
                     <p>La partie club sportif est déjà complétée avec le cachet et la signature de JUMP ASBL.</p>
