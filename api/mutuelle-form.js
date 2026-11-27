@@ -112,12 +112,12 @@ async function fillSolidaris({ pdfDoc, childName, activity, startDate, endDate, 
     page.drawText(mm, { x: 122, y: 163, font, size: 9, color: black });
     page.drawText(yyyy.toString(), { x: 148, y: 163, font, size: 9, color: black });
 
-    // "Signature et cachet :" — cachet en haut, signature en dessous
+    // "Signature et cachet :" — sous le texte, dans l'espace vide
     if (cachetImage) {
-        page.drawImage(cachetImage, { x: 350, y: 80, width: 160, height: 130 });
+        page.drawImage(cachetImage, { x: 350, y: 55, width: 200, height: 160 });
     }
     if (signImage) {
-        page.drawImage(signImage, { x: 360, y: 45, width: 150, height: 100 });
+        page.drawImage(signImage, { x: 365, y: 40, width: 170, height: 115 });
     }
 }
 
