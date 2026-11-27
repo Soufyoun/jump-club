@@ -28,12 +28,17 @@ module.exports = async (req, res) => {
         const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
         const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
-        // Load signature+cachet
-        let stampImage;
+        // Load cachet and signature separately
+        let cachetImage, signImage;
         try {
-            const stampRes = await fetch('https://www.jumpstage.be/assets/signature-cachet.png');
-            const stampBytes = await stampRes.arrayBuffer();
-            stampImage = await pdfDoc.embedPng(new Uint8Array(stampBytes));
+            const cachetRes = await fetch('https://www.jumpstage.be/assets/cachet.png');
+            const cachetBytes = await cachetRes.arrayBuffer();
+            cachetImage = await pdfDoc.embedPng(new Uint8Array(cachetBytes));
+        } catch (e) {}
+        try {
+            const signRes = await fetch('https://www.jumpstage.be/assets/signature.png');
+            const signBytes = await signRes.arrayBuffer();
+            signImage = await pdfDoc.embedPng(new Uint8Array(signBytes));
         } catch (e) {}
 
         const black = rgb(0, 0, 0);
@@ -68,15 +73,15 @@ module.exports = async (req, res) => {
         }
 
         // Cachet du club sportif (case gauche)
-        if (stampImage) {
-            const scale = 90 / stampImage.height;
-            page.drawImage(stampImage, { x: 100, y: 270, width: stampImage.width * scale, height: 90 });
+        if (cachetImage) {
+            const scale = 85 / cachetImage.height;
+            page.drawImage(cachetImage, { x: 110, y: 275, width: cachetImage.width * scale, height: 85 });
         }
 
         // Signature du responsable (case droite)
-        if (stampImage) {
-            const sigScale = 65 / stampImage.height;
-            page.drawImage(stampImage, { x: 390, y: 285, width: stampImage.width * sigScale, height: 65 });
+        if (signImage) {
+            const sigScale = 50 / signImage.height;
+            page.drawImage(signImage, { x: 380, y: 300, width: signImage.width * sigScale, height: 50 });
         }
 
         const filledPdf = await pdfDoc.save();
