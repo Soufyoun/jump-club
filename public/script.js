@@ -512,6 +512,13 @@ document.getElementById('successModal').addEventListener('click', (e) => {
 });
 
 // --- MUTUELLE FORM ---
+const mutSelEl = document.getElementById('mutuelleSelect');
+if (mutSelEl) {
+    mutSelEl.addEventListener('change', () => {
+        const endGroup = document.getElementById('mutEndDateGroup');
+        if (endGroup) endGroup.style.display = mutSelEl.value === 'solidaris' ? '' : 'none';
+    });
+}
 const mutForm = document.getElementById('mutuelleForm');
 if (mutForm) {
     mutForm.addEventListener('submit', async (e) => {
@@ -531,7 +538,8 @@ if (mutForm) {
                     parentEmail: document.getElementById('mutEmail').value,
                     activity: document.getElementById('mutActivity').value,
                     amount: document.getElementById('mutAmount').value,
-                    startDate: document.getElementById('mutStartDate').value
+                    startDate: document.getElementById('mutStartDate').value,
+                    endDate: document.getElementById('mutEndDate') ? document.getElementById('mutEndDate').value : ''
                 })
             });
             const data = await res.json();

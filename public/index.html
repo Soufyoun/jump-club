@@ -772,7 +772,7 @@
                                 <option value="" disabled selected>Choisir votre mutuelle</option>
                                 <option value="partenamut">Partenamut</option>
                                 <option value="mc" disabled>Mutualité Chrétienne (bientôt)</option>
-                                <option value="solidaris" disabled>Solidaris (bientôt)</option>
+                                <option value="solidaris">Solidaris</option>
                                 <option value="helan" disabled>Helan (bientôt)</option>
                             </select>
                         </div>
@@ -802,9 +802,15 @@
                                 <input type="number" id="mutAmount" placeholder="Ex: 210">
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label>Date de début</label>
-                            <input type="date" id="mutStartDate">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Date de début</label>
+                                <input type="date" id="mutStartDate">
+                            </div>
+                            <div class="form-group" id="mutEndDateGroup" style="display:none;">
+                                <label>Date de fin</label>
+                                <input type="date" id="mutEndDate">
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-primary btn-lg" style="width:100%;">
                             Recevoir le formulaire pré-rempli
