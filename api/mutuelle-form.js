@@ -42,7 +42,7 @@ module.exports = async (req, res) => {
         page.drawText('Jump Brussels ASBL', { x: 240, y: 530, font: fontBold, size: 10, color: black });
 
         // "affilié à la Fédération/Ligue" → après la flèche
-        page.drawText('ADEPS - Fédération Wallonie-Bruxelles', { x: 240, y: 510, font, size: 9, color: black });
+        page.drawText('FFBN - Fédération Francophone Belge de Natation', { x: 240, y: 510, font, size: 9, color: black });
 
         // "certifie que (nom et prénom)" → après la flèche
         page.drawText(childName, { x: 240, y: 490, font: fontBold, size: 11, color: black });
@@ -64,7 +64,7 @@ module.exports = async (req, res) => {
 
         // "Montant payé" → dans les cases
         if (amount) {
-            page.drawText(amount.toString(), { x: 185, y: 395, font: fontBold, size: 11, color: black });
+            page.drawText(amount.toString(), { x: 145, y: 395, font: fontBold, size: 11, color: black });
         }
 
         // Cachet du club sportif (case gauche)
