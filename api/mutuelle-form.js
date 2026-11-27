@@ -51,9 +51,10 @@ module.exports = async (req, res) => {
         if (startDate) {
             const parts = startDate.split('-');
             if (parts.length === 3) {
-                page.drawText(parts[2], { x: 418, y: 475, font, size: 9, color: black });
-                page.drawText(parts[1], { x: 455, y: 475, font, size: 9, color: black });
-                page.drawText(parts[0], { x: 492, y: 475, font, size: 9, color: black });
+                // JJ dans la 1ère case, MM dans la 2ème, AAAA dans la 3ème
+                page.drawText(parts[2], { x: 365, y: 473, font, size: 9, color: black });
+                page.drawText(parts[1], { x: 400, y: 473, font, size: 9, color: black });
+                page.drawText(parts[0], { x: 430, y: 473, font, size: 9, color: black });
             }
         }
 
